@@ -4,22 +4,24 @@ package cn.edu.fudan.se.crowdservice.bean;
  * Created by Dawnwords on 2015/8/5.
  */
 public class GlobalOptimizeResult {
-    private int time;
-    private int cost;
+    private long time;
+    private double cost;
 
-    public int getTime() {
+    public long time() {
         return time;
     }
 
-    public void setTime(int time) {
+    public GlobalOptimizeResult time(long time) {
         this.time = time;
+        return this;
     }
 
-    public int getCost() {
+    public double cost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public GlobalOptimizeResult cost(double cost) {
         this.cost = cost;
+        return this;
     }
 }

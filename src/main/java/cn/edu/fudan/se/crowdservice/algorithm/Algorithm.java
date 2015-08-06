@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Dawnwords on 2015/8/6.
  */
-public interface Algroithm {
+public interface Algorithm {
     GlobalOptimizeResult globalOptimize(AlgorithmParameter parameter);
 
     List<CrowdWorker> workerSelection(AlgorithmParameter parameter);

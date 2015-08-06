@@ -8,7 +8,6 @@ import java.util.Random;
 public class WorkerResponseTimeGen implements DataGenerator<Long> {
     @Override
     public Long generate(Random random) {
-        //TODO finish gen
-        return null;
+        return (long) (100 + 500 * random.nextDouble());
     }
 }

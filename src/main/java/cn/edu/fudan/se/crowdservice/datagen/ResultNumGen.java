@@ -8,7 +8,6 @@ import java.util.Random;
 public class ResultNumGen implements DataGenerator<Integer> {
     @Override
     public Integer generate(Random random) {
-        //TODO finish gen
-        return null;
+        return (int) (5 + 2 * Gaussian2Sigma.get(random));
     }
 }

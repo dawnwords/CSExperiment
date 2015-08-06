@@ -8,7 +8,6 @@ import java.util.Random;
 public class DeadlineGen implements DataGenerator<Long> {
     @Override
     public Long generate(Random random) {
-        //TODO finish gen
-        return null;
+        return (long) (500 + 200 * Gaussian2Sigma.get(random));
     }
 }

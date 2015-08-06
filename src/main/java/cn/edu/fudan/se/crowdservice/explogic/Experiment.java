@@ -1,6 +1,7 @@
 package cn.edu.fudan.se.crowdservice.explogic;
 
 import cn.edu.fudan.se.crowdservice.bean.*;
+import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
 import cn.edu.fudan.se.crowdservice.dao.SelectWorkerDAO;
@@ -25,7 +26,10 @@ public class Experiment {
     }
 
     public void start() {
-        CrowdWorkerGroups workerGroups = new SelectWorkerDAO(input.cs1ResultNum(), input.cs2ResultNum(), input.random()).getResult();
+        CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
+                .cs1GroupNum(input.cs1ResultNum())
+                .cs2GroupNum(input.cs2ResultNum())
+                .random(input.random()).getResult();
         AlgorithmParameter cs1GP = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1_CS2)
                 .workers(Arrays.asList(
@@ -71,8 +75,13 @@ public class Experiment {
             }
         }
 
-        new InsertExpStatusDAO(expStatus).getResult();
-        new UpdateTimeCostResultNumDAO(input.expId(), planTC, realTC, realResultNum, cs).getResult();
+        new InsertExpStatusDAO().expStatus(expStatus).getResult();
+        new UpdateTimeCostResultNumDAO()
+                .expId(input.expId())
+                .planTC(planTC)
+                .realTC(realTC)
+                .realResultNum(realResultNum)
+                .cs(cs).getResult();
         input.timeCost().minus(realTC);
     }
 }

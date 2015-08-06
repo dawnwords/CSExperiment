@@ -8,7 +8,6 @@ import java.util.Random;
 public class CostGen implements DataGenerator<Double> {
     @Override
     public Double generate(Random random) {
-        //TODO finish gen
-        return null;
+        return 20 + Gaussian2Sigma.get(random) * 10;
     }
 }

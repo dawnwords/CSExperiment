@@ -8,7 +8,6 @@ import java.util.Random;
 public class WorkerReliabilityGen implements DataGenerator<Double> {
     @Override
     public Double generate(Random random) {
-        //TODO finish gen
-        return null;
+        return 0.7 + 0.15 * Gaussian2Sigma.get(random);
     }
 }

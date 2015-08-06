@@ -8,7 +8,6 @@ import java.util.Random;
 public class WorkerCostGen implements DataGenerator<Double> {
     @Override
     public Double generate(Random random) {
-        //TODO finish gen
-        return null;
+        return 12 + 6 * Gaussian2Sigma.get(random);
     }
 }

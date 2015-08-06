@@ -13,15 +13,24 @@ import java.util.Random;
 /**
  * Created by Dawnwords on 2015/8/6.
  */
-public class WorkerSelectDAO extends DAO<CrowdWorkerGroups> {
+public class SelectWorkerDAO extends DAO<CrowdWorkerGroups> {
 
     private int cs1GroupNum, cs2GroupNum;
     private Random random;
 
-    public WorkerSelectDAO(int cs1GroupNum, int cs2GroupNum, Random random) {
+    public SelectWorkerDAO cs1GroupNum(int cs1GroupNum) {
         this.cs1GroupNum = cs1GroupNum;
+        return this;
+    }
+
+    public SelectWorkerDAO cs2GroupNum(int cs2GroupNum) {
         this.cs2GroupNum = cs2GroupNum;
+        return this;
+    }
+
+    public SelectWorkerDAO random(Random random) {
         this.random = random;
+        return this;
     }
 
     @Override

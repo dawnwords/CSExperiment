@@ -10,10 +10,11 @@ import java.util.List;
  * Created by Dawnwords on 2015/8/6.
  */
 public class InsertExpStatusDAO extends DAO<Boolean> {
-    private final List<ExpStatus> expStatus;
+    private List<ExpStatus> expStatus;
 
-    public InsertExpStatusDAO(List<ExpStatus> expStatus) {
+    public InsertExpStatusDAO expStatus(List<ExpStatus> expStatus) {
         this.expStatus = expStatus;
+        return this;
     }
 
     @Override

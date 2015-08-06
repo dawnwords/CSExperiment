@@ -3,7 +3,7 @@ package cn.edu.fudan.se.crowdservice.explogic;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
-import cn.edu.fudan.se.crowdservice.dao.WorkerSelectDAO;
+import cn.edu.fudan.se.crowdservice.dao.SelectWorkerDAO;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
 import sutd.edu.sg.CrowdWorker;
@@ -25,7 +25,7 @@ public class Experiment {
     }
 
     public void start() {
-        CrowdWorkerGroups workerGroups = new WorkerSelectDAO(input.cs1ResultNum(), input.cs2ResultNum(), input.random()).getResult();
+        CrowdWorkerGroups workerGroups = new SelectWorkerDAO(input.cs1ResultNum(), input.cs2ResultNum(), input.random()).getResult();
         AlgorithmParameter cs1GP = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1_CS2)
                 .workers(Arrays.asList(

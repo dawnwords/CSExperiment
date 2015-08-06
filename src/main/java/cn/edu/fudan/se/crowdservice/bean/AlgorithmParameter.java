@@ -14,6 +14,7 @@ public class AlgorithmParameter {
     private double cost;
     private List<CSWorker> workers;
     private List<CSResultNum> resultNums;
+    private int iterationNum;
 
     public String compositeServiceXML() {
         return compositeServiceXML;
@@ -28,7 +29,7 @@ public class AlgorithmParameter {
         return deadline;
     }
 
-    public AlgorithmParameter deadline(int deadline) {
+    public AlgorithmParameter deadline(long deadline) {
         this.deadline = deadline;
         return this;
     }
@@ -37,13 +38,13 @@ public class AlgorithmParameter {
         return cost;
     }
 
-    public AlgorithmParameter cost(int cost) {
+    public AlgorithmParameter cost(double cost) {
         this.cost = cost;
         return this;
     }
 
     public List<CSWorker> workers() {
-        if(workers == null){
+        if (workers == null) {
             throw new NullPointerException("workers is null");
         }
         return workers;
@@ -58,12 +59,12 @@ public class AlgorithmParameter {
         return this;
     }
 
-    public CSResultNum[] resultNumArray(){
+    public CSResultNum[] resultNumArray() {
         return resultNums().toArray(new CSResultNum[resultNums().size()]);
     }
 
     public List<CSResultNum> resultNums() {
-        if(resultNums == null){
+        if (resultNums == null) {
             throw new NullPointerException("resultNums is null");
         }
         return resultNums;
@@ -71,6 +72,15 @@ public class AlgorithmParameter {
 
     public AlgorithmParameter resultNums(List<CSResultNum> resultNums) {
         this.resultNums = resultNums;
+        return this;
+    }
+
+    public int iterationNum() {
+        return iterationNum;
+    }
+
+    public AlgorithmParameter iterationNum(int iterationNum) {
+        this.iterationNum = iterationNum;
         return this;
     }
 }

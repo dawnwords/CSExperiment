@@ -14,7 +14,6 @@ public class AlgorithmParameter {
     private double cost;
     private List<CSWorker> workers;
     private List<CSResultNum> resultNums;
-    private int iterationNum;
 
     public String compositeServiceXML() {
         return compositeServiceXML;
@@ -75,12 +74,20 @@ public class AlgorithmParameter {
         return this;
     }
 
-    public int iterationNum() {
-        return iterationNum;
-    }
-
-    public AlgorithmParameter iterationNum(int iterationNum) {
-        this.iterationNum = iterationNum;
-        return this;
+    @Override
+    public String toString() {
+        String result = "AlgorithmParameter{" +
+                "\n compositeServiceXML:\n" + compositeServiceXML +
+                "\n deadline:" + deadline +
+                "\n cost:" + cost +
+                "\n workers: [\n";
+        for (CSWorker worker : workers) {
+            result += worker.toString() + "\n";
+        }
+        result += " ]\n resultnums:[\n";
+        for (CSResultNum resultNum : resultNums) {
+            result += resultNum.toString() + "\n";
+        }
+        return result + " ]\n}";
     }
 }

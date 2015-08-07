@@ -12,39 +12,79 @@ import sutd.edu.sg.CrowdWorker;
 import java.io.Serializable;
 
 public class CSWorker implements Serializable {
-    private String key;
+    // Type metadata
+    private static org.apache.axis.description.TypeDesc typeDesc =
+            new org.apache.axis.description.TypeDesc(CSWorker.class, true);
 
+    static {
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", ">ArrayOfKeyValueOfstringArrayOfCrowdWorker8Qgdyvm9>KeyValueOfstringArrayOfCrowdWorker8Qgdyvm9"));
+        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("key");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "Key"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("value");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "Value"));
+        elemField.setXmlType(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdWorker"));
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdWorker"));
+        typeDesc.addFieldDesc(elemField);
+    }
+
+    private String key;
     private CrowdWorker[] value;
+    private Object __equalsCalc = null;
+    private boolean __hashCodeCalc = false;
+
 
     public CSWorker() {
     }
+
 
     public CSWorker(String key, CrowdWorker[] value) {
         this.key = key;
         this.value = value;
     }
 
+    public static org.apache.axis.description.TypeDesc getTypeDesc() {
+        return typeDesc;
+    }
+
+    public static org.apache.axis.encoding.Serializer getSerializer(
+            String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanSerializer(
+                        _javaType, _xmlType, typeDesc);
+    }
+
+    public static org.apache.axis.encoding.Deserializer getDeserializer(
+            String mechType,
+            java.lang.Class _javaType,
+            javax.xml.namespace.QName _xmlType) {
+        return
+                new org.apache.axis.encoding.ser.BeanDeserializer(
+                        _javaType, _xmlType, typeDesc);
+    }
 
     public String getKey() {
         return key;
     }
 
-
     public void setKey(String key) {
         this.key = key;
     }
-
 
     public CrowdWorker[] getValue() {
         return value;
     }
 
-
     public void setValue(CrowdWorker[] value) {
         this.value = value;
     }
-
-    private Object __equalsCalc = null;
 
     public synchronized boolean equals(Object obj) {
         if (!(obj instanceof CSWorker)) return false;
@@ -64,8 +104,6 @@ public class CSWorker implements Serializable {
         __equalsCalc = null;
         return _equals;
     }
-
-    private boolean __hashCodeCalc = false;
 
     public synchronized int hashCode() {
         if (__hashCodeCalc) {
@@ -91,47 +129,11 @@ public class CSWorker implements Serializable {
         return _hashCode;
     }
 
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-            new org.apache.axis.description.TypeDesc(CSWorker.class, true);
-
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", ">ArrayOfKeyValueOfstringArrayOfCrowdWorker8Qgdyvm9>KeyValueOfstringArrayOfCrowdWorker8Qgdyvm9"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("key");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "Key"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("value");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "Value"));
-        elemField.setXmlType(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdWorker"));
-        elemField.setNillable(true);
-        elemField.setItemQName(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdWorker"));
-        typeDesc.addFieldDesc(elemField);
+    @Override
+    public String toString() {
+        return "CSWorker{" +
+                "key='" + key + '\'' +
+                ", value= CrowdWorker[" + value.length +
+                "]}";
     }
-
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
-
-    public static org.apache.axis.encoding.Serializer getSerializer(
-            String mechType,
-            java.lang.Class _javaType,
-            javax.xml.namespace.QName _xmlType) {
-        return
-                new org.apache.axis.encoding.ser.BeanSerializer(
-                        _javaType, _xmlType, typeDesc);
-    }
-
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-            String mechType,
-            java.lang.Class _javaType,
-            javax.xml.namespace.QName _xmlType) {
-        return
-                new org.apache.axis.encoding.ser.BeanDeserializer(
-                        _javaType, _xmlType, typeDesc);
-    }
-
 }

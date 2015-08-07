@@ -8,13 +8,13 @@ import sutd.edu.sg.CrowdServiceProxy;
 import sutd.edu.sg.CrowdWorker;
 
 import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Dawnwords on 2015/8/6.
  */
 public class TianHuatAlgorithm implements Algorithm {
+    private static final int ITERATION_NUM = 100;
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
@@ -31,6 +31,7 @@ public class TianHuatAlgorithm implements Algorithm {
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
         List<CrowdWorker> crowdWorkers = new LinkedList<>();
+        Map<String, List<Integer>> indexMap = saveIndex(parameter.workers());
         try {
             CrowdOptimizationResult result = new CrowdServiceProxy().globalOptimize(
                     parameter.compositeServiceXML(),
@@ -38,13 +39,15 @@ public class TianHuatAlgorithm implements Algorithm {
                     parameter.cost(),
                     parameter.workerArray(),
                     parameter.resultNumArray(),
-                    parameter.iterationNum());
+                    ITERATION_NUM);
             CSWorker[] crowdServiceSelection = result.getCrowdServiceSelection();
             if (crowdServiceSelection.length == 0) {
                 throw new RuntimeException("crowdServiceSelection.length == 0");
             }
             for (CSWorker cw : crowdServiceSelection) {
+                List<Integer> index = indexMap.get(cw.getKey());
                 for (CrowdWorker worker : cw.getValue()) {
+                    worker.setIndex(index.get(worker.getIndex()));
                     if (worker.getSelected()) {
                         crowdWorkers.add(worker);
                     }
@@ -54,5 +57,19 @@ public class TianHuatAlgorithm implements Algorithm {
             throw new RuntimeException(e);
         }
         return crowdWorkers;
+    }
+
+    private Map<String, List<Integer>> saveIndex(List<CSWorker> workers) {
+        Map<String, List<Integer>> result = new HashMap<>();
+        for (CSWorker worker : workers) {
+            ArrayList<Integer> value = new ArrayList<>();
+            int i = 0;
+            for (CrowdWorker w : worker.getValue()) {
+                value.add(w.getIndex());
+                w.setIndex(i++);
+            }
+            result.put(worker.getKey(), value);
+        }
+        return result;
     }
 }

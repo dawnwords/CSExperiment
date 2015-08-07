@@ -124,4 +124,11 @@ public class CSResultNum implements java.io.Serializable {
                         _javaType, _xmlType, typeDesc);
     }
 
+    @Override
+    public String toString() {
+        return "CSResultNum{" +
+                "key='" + key + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

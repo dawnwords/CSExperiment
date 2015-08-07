@@ -7,6 +7,10 @@ import java.sql.Statement;
  * Created by Dawnwords on 2015/8/6.
  */
 public class ResetDBDAO extends DAO<Boolean> {
+    public static void main(String[] args) {
+        new ResetDBDAO().getResult();
+    }
+
     @Override
     protected Boolean processData(Connection connection) throws Exception {
         Statement statement = connection.createStatement();

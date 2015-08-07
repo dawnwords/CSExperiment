@@ -67,12 +67,4 @@ public class ExperimentInput {
         this.timeCost = timeCost;
         return this;
     }
-
-    public double cost() {
-        return timeCost.cost();
-    }
-
-    public long time() {
-        return timeCost.time();
-    }
 }

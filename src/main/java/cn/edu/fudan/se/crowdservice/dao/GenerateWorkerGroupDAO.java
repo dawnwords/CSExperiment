@@ -50,7 +50,7 @@ public class GenerateWorkerGroupDAO extends DAO<CrowdWorkerGroups> {
         for (i = 0; i < cs1GroupNum; i++) {
             result.addCS1Worker(all.get(i));
         }
-        for (; i < cs2GroupNum; i++) {
+        for (; i < selectedNumber; i++) {
             result.addCS2Worker(all.get(i));
         }
         return result;

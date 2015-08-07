@@ -3,8 +3,8 @@ package cn.edu.fudan.se.crowdservice.explogic;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
+import cn.edu.fudan.se.crowdservice.dao.SelectExpResultDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
-import cn.edu.fudan.se.crowdservice.dao.SelectWorkerDAO;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
 import sutd.edu.sg.CrowdWorker;
@@ -25,7 +25,7 @@ public class Experiment {
         this.input = input;
     }
 
-    public void start() {
+    public ExpResult preform() {
         CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
                 .cs1GroupNum(input.cs1ResultNum())
                 .cs2GroupNum(input.cs2ResultNum())
@@ -51,6 +51,8 @@ public class Experiment {
 
         executeCS("CS1", cs1GP, cs1WS);
         executeCS("CS2", cs2GP, cs2GP);
+
+        return new SelectExpResultDAO().getResult();
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {

@@ -2,6 +2,7 @@ package cn.edu.fudan.se.crowdservice.algorithm;
 
 import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
+import cn.edu.fudan.se.crowdservice.util.Logger;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
 import sutd.edu.sg.CrowdWorker;
@@ -20,35 +21,40 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        List<CrowdWorker> cwList = rank(parameter);
-        long time = cwList.get(0).getResponseTime();
-        double cost = 0;
-        for (CrowdWorker cw : cwList) {
-            if (time < cw.getResponseTime()) time = cw.getResponseTime();
-            cost += cw.getCost();
+        List<CSWorker> csWorkers = serviceTopK(parameter);
+        TimeCost[] timeCosts = new TimeCost[csWorkers.size()];
+        TimeCost total = new TimeCost();
+        for (int i = 0; i < timeCosts.length; i++) {
+            timeCosts[i] = new TimeCost();
+            for (CrowdWorker cw : csWorkers.get(i).getValue()) {
+                timeCosts[i].aggregate(cw.getResponseTime(), cw.getCost());
+            }
+            Logger.info(parameter.resultNumArray()[i].getKey() + " : " + timeCosts[i]);
+            total.aggregate(timeCosts[i]);
         }
-        TimeCost retVal = new TimeCost();
-        retVal.cost(cost);
-        retVal.time(time);
-        return retVal;
+        return new TimeCost()
+                .time(parameter.deadline() * timeCosts[0].time() / total.time())
+                .cost(parameter.cost() * timeCosts[0].cost() / total.cost());
     }
 
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
-        return rank(parameter);
+        return Arrays.asList(serviceTopK(parameter).get(0).getValue());
     }
 
-    public List<CrowdWorker> rank(AlgorithmParameter parameter) {
-        List<CSResultNum> retNums = parameter.resultNums();
+    public List<CSWorker> serviceTopK(AlgorithmParameter parameter) {
+        List<CSResultNum> csResultNums = parameter.resultNums();
         List<CSWorker> csw = parameter.workers();
-        List<CrowdWorker> retCrowdWorker = new ArrayList<>();
+        List<CSWorker> result = new ArrayList<>();
 
-        for (int i = 0; i < retNums.size(); i++) {
+        for (int i = 0; i < csResultNums.size(); i++) {
             CSWorker csWorker = csw.get(i);
             CrowdWorker[] cw = csWorker.getValue();
-            Arrays.sort(cw, comparator);
-            retCrowdWorker.addAll(Arrays.asList(cw).subList(0, retNums.get(i).getValue()));
+            CrowdWorker[] newcs = Arrays.copyOf(cw, cw.length);
+            Arrays.sort(newcs, comparator);
+
+            result.add(new CSWorker(csWorker.getKey(), Arrays.copyOf(newcs, csResultNums.get(i).getValue())));
         }
-        return retCrowdWorker;
+        return result;
     }
 }

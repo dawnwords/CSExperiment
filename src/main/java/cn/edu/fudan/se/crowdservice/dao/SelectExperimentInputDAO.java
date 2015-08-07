@@ -43,7 +43,7 @@ public class SelectExperimentInputDAO extends DAO<List<ExperimentInput>> {
     @Override
     protected List<ExperimentInput> processData(Connection connection) throws Exception {
         Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT id,cost,deadline,cs1realResultNum,cs2resultNum FROM expinput");
+        ResultSet rs = statement.executeQuery("SELECT id,cost,deadline,cs1resultNum,cs2resultNum FROM expinput");
         ArrayList<ExperimentInput> result = new ArrayList<>();
         while (rs.next()) {
             result.add(new ExperimentInput()

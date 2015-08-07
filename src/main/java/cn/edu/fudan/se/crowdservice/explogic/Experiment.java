@@ -5,6 +5,7 @@ import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
 import cn.edu.fudan.se.crowdservice.dao.SelectExpResultDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
+import cn.edu.fudan.se.crowdservice.util.Logger;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
 import sutd.edu.sg.CrowdWorker;
@@ -56,9 +57,15 @@ public class Experiment {
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
+        Logger.info("Executing %s", cs);
         TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara.timeCost(input.timeCost()));
+        Logger.info("Finish Global Optimize:" + planTC);
 
         List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara.timeCost(planTC));
+        Logger.info("Finish Worker Selection: ");
+        for (CrowdWorker worker : selectedWorkers) {
+            Logger.info("%s", worker);
+        }
 
         List<ExpStatus> expStatus = new ArrayList<>();
         TimeCost realTC = new TimeCost();
@@ -85,6 +92,7 @@ public class Experiment {
                 .realTC(realTC)
                 .realResultNum(realResultNum)
                 .cs(cs).getResult();
+        Logger.info("Finish Executing: %s", realTC);
         input.timeCost().minus(realTC);
     }
 }

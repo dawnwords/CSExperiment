@@ -30,7 +30,7 @@ public class UpdateTimeCostResultNumDAO extends DAO<Boolean> {
     }
 
     public UpdateTimeCostResultNumDAO cs(String cs) {
-        this.cs = cs;
+        this.cs = cs.toLowerCase();
         return this;
     }
 
@@ -41,21 +41,21 @@ public class UpdateTimeCostResultNumDAO extends DAO<Boolean> {
 
     @Override
     protected Boolean processData(Connection connection) throws Exception {
-        String sql = "UPDATE expinput SET ?=?, ?=?, ?=?, ?=?, ?=?, ?=(? = ?) WHERE id = ?";
+        String sql = "UPDATE expinput SET " +
+                cs + "deadline=?, " +
+                cs + "cost=?, " +
+                cs + "realtime=?, " +
+                cs + "realcost=?, " +
+                cs + "realResultNum=?, " +
+                cs + "success=(" +
+                cs + "resultNum = ?) WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         int i = 0;
-        ps.setString(++i, cs + "deadline");
         ps.setLong(++i, planTC.time());
-        ps.setString(++i, cs + "cost");
         ps.setDouble(++i, planTC.cost());
-        ps.setString(++i, cs + "realtime");
         ps.setLong(++i, realTC.time());
-        ps.setString(++i, cs + "realcost");
         ps.setDouble(++i, realTC.cost());
-        ps.setString(++i, cs + "realResultNum");
         ps.setInt(++i, realResultNum);
-        ps.setString(++i, cs + "success");
-        ps.setString(++i, cs + "resultNum");
         ps.setInt(++i, realResultNum);
         ps.setInt(++i, expId);
         return ps.executeUpdate() == 1;

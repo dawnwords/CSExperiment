@@ -56,7 +56,8 @@ public class Experiment {
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
-        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara.cost(input.cost()).deadline(input.time()));
+        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara
+                .cost(input.timeCost().cost()).deadline(input.timeCost().time()));
 
         List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara.cost(planTC.cost()).deadline(planTC.time()));
 
@@ -64,7 +65,8 @@ public class Experiment {
         TimeCost realTC = new TimeCost();
         int realResultNum = 0;
         for (CrowdWorker worker : selectedWorkers) {
-            boolean success = worker.getReliability() > input.random().nextDouble();
+            boolean success = worker.getReliability() > input.random().nextDouble() &&
+                    worker.getResponseTime() < planTC.time();
             expStatus.add(new ExpStatus()
                     .expid(input.expId())
                     .workerid(worker.getIndex())

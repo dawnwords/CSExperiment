@@ -51,8 +51,7 @@ public class TestAlgorithm {
 
         AlgorithmParameter parameter = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1_CS2)
-                .deadline(deadline)
-                .cost(cost)
+                .timeCost(new TimeCost().time(deadline).cost(cost))
                 .resultNums(Arrays.asList(
                         new CSResultNum(BPELXml.CS1_NAME, 3),
                         new CSResultNum(BPELXml.CS2_NAME, 2)
@@ -69,8 +68,7 @@ public class TestAlgorithm {
 
         parameter = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1)
-                .deadline(timeCost.time())
-                .cost(timeCost.cost())
+                .timeCost(timeCost)
                 .resultNums(Collections.singletonList(new CSResultNum(BPELXml.CS1_NAME, 3)))
                 .workers(Collections.singletonList(new CSWorker(BPELXml.CS1_NAME, groups.cs1GroupArray())));
 

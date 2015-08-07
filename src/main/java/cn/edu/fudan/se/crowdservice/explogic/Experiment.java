@@ -27,8 +27,8 @@ public class Experiment {
 
     public ExpResult preform() {
         CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
-                .cs1GroupNum(input.cs1ResultNum())
-                .cs2GroupNum(input.cs2ResultNum())
+                .cs1GroupNum(input.cs1GroupNum())
+                .cs2GroupNum(input.cs2GroupNum())
                 .random(input.random()).getResult();
         AlgorithmParameter cs1GP = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1_CS2)
@@ -56,10 +56,9 @@ public class Experiment {
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
-        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara
-                .cost(input.timeCost().cost()).deadline(input.timeCost().time()));
+        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara.timeCost(input.timeCost()));
 
-        List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara.cost(planTC.cost()).deadline(planTC.time()));
+        List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara.timeCost(planTC));
 
         List<ExpStatus> expStatus = new ArrayList<>();
         TimeCost realTC = new TimeCost();

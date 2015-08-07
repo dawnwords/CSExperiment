@@ -11,6 +11,7 @@ public class ExperimentInput {
     private Algorithm algorithm;
     private int expId;
     private int cs1ResultNum, cs2ResultNum;
+    private int cs1GroupNum, cs2GroupNum;
     private Random random;
     private TimeCost timeCost;
 
@@ -29,6 +30,24 @@ public class ExperimentInput {
 
     public ExperimentInput algorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
+        return this;
+    }
+
+    public int cs1GroupNum() {
+        return cs1GroupNum;
+    }
+
+    public ExperimentInput cs1GroupNum(int cs1GroupNum) {
+        this.cs1GroupNum = cs1GroupNum;
+        return this;
+    }
+
+    public int cs2GroupNum() {
+        return cs2GroupNum;
+    }
+
+    public ExperimentInput cs2GroupNum(int cs2GroupNum) {
+        this.cs2GroupNum = cs2GroupNum;
         return this;
     }
 
@@ -66,5 +85,18 @@ public class ExperimentInput {
     public ExperimentInput timeCost(TimeCost timeCost) {
         this.timeCost = timeCost;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ExperimentInput{" +
+                "algorithm=" + algorithm.getClass().getSimpleName() +
+                ", expId=" + expId +
+                ", cs1ResultNum=" + cs1ResultNum +
+                ", cs2ResultNum=" + cs2ResultNum +
+                ", cs1GroupNum=" + cs1GroupNum +
+                ", cs2GroupNum=" + cs2GroupNum +
+                ", timeCost=" + timeCost +
+                '}';
     }
 }

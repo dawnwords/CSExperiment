@@ -23,18 +23,21 @@ public abstract class NaiveAlgorithm implements Algorithm {
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
         List<CSWorker> csWorkers = serviceTopK(parameter);
         TimeCost[] timeCosts = new TimeCost[csWorkers.size()];
-        TimeCost total = new TimeCost();
+
+        long timeTotal = 0;
+        double costTotal = 0;
         for (int i = 0; i < timeCosts.length; i++) {
             timeCosts[i] = new TimeCost();
             for (CrowdWorker cw : csWorkers.get(i).getValue()) {
                 timeCosts[i].aggregate(cw.getResponseTime(), cw.getCost());
             }
             Logger.info(parameter.resultNumArray()[i].getKey() + " : " + timeCosts[i]);
-            total.aggregate(timeCosts[i]);
+            timeTotal += timeCosts[i].time();
+            costTotal += timeCosts[i].cost();
         }
         return new TimeCost()
-                .time(parameter.deadline() * timeCosts[0].time() / total.time())
-                .cost(parameter.cost() * timeCosts[0].cost() / total.cost());
+                .time(parameter.deadline() * timeCosts[0].time() / timeTotal)
+                .cost(parameter.cost() * timeCosts[0].cost() / costTotal);
     }
 
     @Override

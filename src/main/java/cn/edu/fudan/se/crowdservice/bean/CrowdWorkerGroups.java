@@ -17,10 +17,6 @@ public class CrowdWorkerGroups {
         this.cs2Group = new ArrayList<>();
     }
 
-    public CrowdWorkerGroups(ArrayList<CrowdWorker> all) {
-
-    }
-
     public CrowdWorkerGroups addCS1Worker(CrowdWorker worker) {
         cs1Group.add(worker);
         return this;

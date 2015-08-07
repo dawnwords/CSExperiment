@@ -10,8 +10,7 @@ import java.util.List;
  */
 public class AlgorithmParameter {
     private String compositeServiceXML;
-    private long deadline;
-    private double cost;
+    private TimeCost timeCost;
     private List<CSWorker> workers;
     private List<CSResultNum> resultNums;
 
@@ -25,20 +24,15 @@ public class AlgorithmParameter {
     }
 
     public long deadline() {
-        return deadline;
-    }
-
-    public AlgorithmParameter deadline(long deadline) {
-        this.deadline = deadline;
-        return this;
+        return timeCost.time();
     }
 
     public double cost() {
-        return cost;
+        return timeCost.cost();
     }
 
-    public AlgorithmParameter cost(double cost) {
-        this.cost = cost;
+    public AlgorithmParameter timeCost(TimeCost timeCost) {
+        this.timeCost = timeCost;
         return this;
     }
 
@@ -78,8 +72,7 @@ public class AlgorithmParameter {
     public String toString() {
         String result = "AlgorithmParameter{" +
                 "\n compositeServiceXML:\n" + compositeServiceXML +
-                "\n deadline:" + deadline +
-                "\n cost:" + cost +
+                "\n timecost:" + timeCost +
                 "\n workers: [\n";
         for (CSWorker worker : workers) {
             result += worker.toString() + "\n";

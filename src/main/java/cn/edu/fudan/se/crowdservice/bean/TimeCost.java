@@ -30,11 +30,6 @@ public class TimeCost {
         this.cost -= timeCost.cost;
     }
 
-    public void aggregate(TimeCost timeCost) {
-        this.time = Math.max(this.time, timeCost.time);
-        this.cost += timeCost.cost;
-    }
-
     public void aggregate(long time, double cost) {
         this.time = Math.max(this.time, time);
         this.cost += cost;

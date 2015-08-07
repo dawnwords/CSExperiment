@@ -44,4 +44,14 @@ public class ExpResult {
         this.success = success;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ExpResult{" +
+                "total=" + total +
+                ", cs1success=" + cs1success +
+                ", cs2success=" + cs2success +
+                ", success=" + success +
+                '}';
+    }
 }

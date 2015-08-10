@@ -129,11 +129,17 @@ public class CSWorker implements Serializable {
         return _hashCode;
     }
 
+
     @Override
     public String toString() {
-        return "CSWorker{" +
-                "key='" + key + '\'' +
-                ", value= CrowdWorker[" + value.length +
-                "]}";
+        final StringBuffer sb = new StringBuffer("CSWorker{");
+        sb.append("key='").append(key).append('\'');
+        sb.append(", value=[");
+        for (CrowdWorker cw : value) {
+            sb.append(cw);
+            sb.append(",\n");
+        }
+        sb.append("]}");
+        return sb.toString();
     }
 }

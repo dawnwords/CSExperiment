@@ -58,11 +58,15 @@ public class Experiment {
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
         Logger.info("Executing %s", cs);
-        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara.timeCost(input.timeCost()));
+        globalPlanningPara.timeCost(input.timeCost());
+        Logger.info("Global Optimization Input:" + globalPlanningPara);
+        TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara);
         Logger.info("Finish Global Optimize:" + planTC);
 
-        List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara.timeCost(planTC));
-        Logger.info("Finish Worker Selection: ");
+        workerSelectionPara.timeCost(planTC);
+        Logger.info("Worker Selection Input:" + workerSelectionPara);
+        List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara);
+        Logger.info("Finish Worker Selection:");
         for (CrowdWorker worker : selectedWorkers) {
             Logger.info("%s", worker);
         }

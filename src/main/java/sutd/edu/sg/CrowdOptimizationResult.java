@@ -69,20 +69,18 @@ public class CrowdOptimizationResult  implements java.io.Serializable {
     public synchronized boolean equals(Object obj) {
         if (!(obj instanceof CrowdOptimizationResult)) return false;
         CrowdOptimizationResult other = (CrowdOptimizationResult) obj;
-        if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
             return (__equalsCalc == obj);
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = true && 
-            ((this.crowdServiceSelection==null && other.getCrowdServiceSelection()==null) || 
-             (this.crowdServiceSelection!=null &&
-              java.util.Arrays.equals(this.crowdServiceSelection, other.getCrowdServiceSelection()))) &&
-            ((this.totalReliability==null && other.getTotalReliability()==null) || 
-             (this.totalReliability!=null &&
-              this.totalReliability.equals(other.getTotalReliability())));
+        _equals = ((this.crowdServiceSelection == null && other.getCrowdServiceSelection() == null) ||
+                (this.crowdServiceSelection != null &&
+                        java.util.Arrays.equals(this.crowdServiceSelection, other.getCrowdServiceSelection()))) &&
+                ((this.totalReliability == null && other.getTotalReliability() == null) ||
+                        (this.totalReliability != null &&
+                                this.totalReliability.equals(other.getTotalReliability())));
         __equalsCalc = null;
         return _equals;
     }

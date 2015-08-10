@@ -14,7 +14,7 @@ import java.util.*;
  * Created by Dawnwords on 2015/8/6.
  */
 public class TianHuatAlgorithm implements Algorithm {
-    private static final int ITERATION_NUM = 100;
+    private static final int ITERATION_NUM = 500;
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
@@ -44,13 +44,12 @@ public class TianHuatAlgorithm implements Algorithm {
             if (crowdServiceSelection.length == 0) {
                 throw new RuntimeException("crowdServiceSelection.length == 0");
             }
-            for (CSWorker cw : crowdServiceSelection) {
-                List<Integer> index = indexMap.get(cw.getKey());
-                for (CrowdWorker worker : cw.getValue()) {
-                    worker.setIndex(index.get(worker.getIndex()));
-                    if (worker.getSelected()) {
-                        crowdWorkers.add(worker);
-                    }
+            CSWorker cw = crowdServiceSelection[0];
+            List<Integer> index = indexMap.get(cw.getKey());
+            for (CrowdWorker worker : cw.getValue()) {
+                worker.setIndex(index.get(worker.getIndex()));
+                if (worker.getSelected()) {
+                    crowdWorkers.add(worker);
                 }
             }
         } catch (RemoteException e) {

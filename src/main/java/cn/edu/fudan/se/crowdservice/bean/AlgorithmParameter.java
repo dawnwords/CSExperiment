@@ -1,9 +1,10 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
 
-import java.util.List;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSResultNumList;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSResultNumList.CSResultNum;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSWorkerList;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSWorkerList.CSWorker;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -11,8 +12,8 @@ import java.util.List;
 public class AlgorithmParameter {
     private String compositeServiceXML;
     private TimeCost timeCost;
-    private List<CSWorker> workers;
-    private List<CSResultNum> resultNums;
+    private CSWorkerList workers;
+    private CSResultNumList resultNums;
 
     public String compositeServiceXML() {
         return compositeServiceXML;
@@ -36,34 +37,26 @@ public class AlgorithmParameter {
         return this;
     }
 
-    public List<CSWorker> workers() {
+    public CSWorkerList workers() {
         if (workers == null) {
             throw new NullPointerException("workers is null");
         }
         return workers;
     }
 
-    public CSWorker[] workerArray() {
-        return workers().toArray(new CSWorker[workers().size()]);
-    }
-
-    public AlgorithmParameter workers(List<CSWorker> workers) {
+    public AlgorithmParameter workers(CSWorkerList workers) {
         this.workers = workers;
         return this;
     }
 
-    public CSResultNum[] resultNumArray() {
-        return resultNums().toArray(new CSResultNum[resultNums().size()]);
-    }
-
-    public List<CSResultNum> resultNums() {
+    public CSResultNumList resultNums() {
         if (resultNums == null) {
             throw new NullPointerException("resultNums is null");
         }
         return resultNums;
     }
 
-    public AlgorithmParameter resultNums(List<CSResultNum> resultNums) {
+    public AlgorithmParameter resultNums(CSResultNumList resultNums) {
         this.resultNums = resultNums;
         return this;
     }
@@ -74,11 +67,11 @@ public class AlgorithmParameter {
                 "\n compositeServiceXML:\n" + compositeServiceXML +
                 "\n timecost:" + timeCost +
                 "\n workers: [\n";
-        for (CSWorker worker : workers) {
+        for (CSWorker worker : workers.getCSWorker()) {
             result += worker.toString() + "\n";
         }
         result += " ]\n resultnums:[\n";
-        for (CSResultNum resultNum : resultNums) {
+        for (CSResultNum resultNum : resultNums.getCSResultNum()) {
             result += resultNum.toString() + "\n";
         }
         return result + " ]\n}";

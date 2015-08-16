@@ -3,8 +3,10 @@ package cn.edu.fudan.se.crowdservice.algorithm;
 import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
 import cn.edu.fudan.se.crowdservice.util.Logger;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSResultNumList;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSWorkerList;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSWorkerList.CSWorker;
+import sutd.edu.sg.ArrayOfCrowdWorker;
 import sutd.edu.sg.CrowdWorker;
 
 import java.util.ArrayList;
@@ -21,19 +23,20 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        List<CSWorker> csWorkers = rank(parameter);
-        TimeCost[] timeCosts = new TimeCost[csWorkers.size()];
+        CSWorkerList csWorkers = rank(parameter);
+        TimeCost[] timeCosts = new TimeCost[csWorkers.getCSWorker().size()];
 
         long timeTotal = 0;
         double costTotal = 0;
         for (int i = 0; i < timeCosts.length; i++) {
             timeCosts[i] = new TimeCost();
-            CrowdWorker[] cw = csWorkers.get(i).getValue();
-            int resultNum = parameter.resultNumArray()[i].getValue();
-            for (int j = 0; j < cw.length && j < resultNum; j++) {
-                timeCosts[i].aggregate(cw[j].getResponseTime(), cw[j].getCost());
+            ArrayOfCrowdWorker cw = csWorkers.getCSWorker().get(i).getValue();
+            int resultNum = parameter.resultNums().getCSResultNum().get(i).getValue();
+            for (int j = 0; j < cw.getCrowdWorker().size() && j < resultNum; j++) {
+                CrowdWorker worker = cw.getCrowdWorker().get(j);
+                timeCosts[i].aggregate(worker.getResponseTime(), worker.getCost());
             }
-            Logger.info(parameter.resultNumArray()[i].getKey() + " : " + timeCosts[i]);
+            Logger.info(parameter.resultNums().getCSResultNum().get(i).getKey() + " : " + timeCosts[i]);
             timeTotal += timeCosts[i].time();
             costTotal += timeCosts[i].cost();
         }
@@ -44,10 +47,10 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
-        CrowdWorker[] cw = rank(parameter).get(0).getValue();
+        ArrayOfCrowdWorker cw = rank(parameter).getCSWorker().get(0).getValue();
         double totalCost = parameter.cost();
         ArrayList<CrowdWorker> result = new ArrayList<>();
-        for (CrowdWorker worker : cw) {
+        for (CrowdWorker worker : cw.getCrowdWorker()) {
             if (totalCost > worker.getCost()) {
                 totalCost -= worker.getCost();
                 result.add(worker);
@@ -56,24 +59,30 @@ public abstract class NaiveAlgorithm implements Algorithm {
         return result;
     }
 
-    public List<CSWorker> rank(AlgorithmParameter parameter) {
-        List<CSResultNum> csResultNums = parameter.resultNums();
-        List<CSWorker> csw = parameter.workers();
-        List<CSWorker> result = new ArrayList<>();
+    public CSWorkerList rank(AlgorithmParameter parameter) {
+        CSResultNumList csResultNums = parameter.resultNums();
+        CSWorkerList csw = parameter.workers();
+        CSWorkerList result = new CSWorkerList();
 
-        for (int i = 0; i < csResultNums.size(); i++) {
-            CSWorker csWorker = csw.get(i);
-            CrowdWorker[] cw = csWorker.getValue();
+        for (int i = 0; i < csResultNums.getCSResultNum().size(); i++) {
+            CSWorker csWorker = csw.getCSWorker().get(i);
+            ArrayOfCrowdWorker cw = csWorker.getValue();
 
             List<CrowdWorker> newcw = new ArrayList<>();
-            for (CrowdWorker w : cw) {
+            for (CrowdWorker w : cw.getCrowdWorker()) {
                 if (w.getResponseTime() < parameter.deadline()) {
                     newcw.add(w);
                 }
             }
 
             Collections.sort(newcw, comparator);
-            result.add(new CSWorker(csWorker.getKey(), newcw.toArray(new CrowdWorker[newcw.size()])));
+            CSWorker worker = new CSWorker();
+            worker.setKey(csWorker.getKey());
+
+            ArrayOfCrowdWorker value = new ArrayOfCrowdWorker();
+            value.setCrowdWorker(newcw);
+            worker.setValue(value);
+            result.add(worker);
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
+import sutd.edu.sg.ArrayOfCrowdWorker;
 import sutd.edu.sg.CrowdWorker;
 
 import java.util.ArrayList;
@@ -31,15 +32,15 @@ public class CrowdWorkerGroups {
         return cs1Group;
     }
 
-    public CrowdWorker[] cs1GroupArray() {
-        return cs1Group.toArray(new CrowdWorker[cs1Group.size()]);
+    public ArrayOfCrowdWorker cs1GroupArray() {
+        return new ArrayOfCrowdWorker().setCrowdWorker(cs1Group);
     }
 
     public List<CrowdWorker> cs2Group() {
         return cs2Group;
     }
 
-    public CrowdWorker[] cs2GroupArray() {
-        return cs2Group.toArray(new CrowdWorker[cs2Group.size()]);
+    public ArrayOfCrowdWorker cs2GroupArray() {
+        return new ArrayOfCrowdWorker().setCrowdWorker(cs2Group);
     }
 }

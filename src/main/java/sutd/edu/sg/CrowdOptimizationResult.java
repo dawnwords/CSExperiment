@@ -1,167 +1,91 @@
-/**
- * CrowdOptimizationResult.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
- */
 
 package sutd.edu.sg;
 
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlType;
+import com.microsoft.schemas._2003._10.serialization.arrays.CSWorkerList;
 
-public class CrowdOptimizationResult  implements java.io.Serializable {
-    private CSWorker[]
-    		crowdServiceSelection;
 
-    private Double totalReliability;
+/**
+ * <p>CrowdOptimizationResult complex type的 Java 类。
+ * 
+ * <p>以下模式片段指定包含在此类中的预期内容。
+ * 
+ * <pre>
+ * &lt;complexType name="CrowdOptimizationResult">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="crowdServiceSelection" type="{http://schemas.microsoft.com/2003/10/Serialization/Arrays}ArrayOfKeyValueOfstringArrayOfCrowdWorker8Qgdyvm9" minOccurs="0"/>
+ *         &lt;element name="totalReliability" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "CrowdOptimizationResult", propOrder = {
+    "crowdServiceSelection",
+    "totalReliability"
+})
+public class CrowdOptimizationResult {
 
-    public CrowdOptimizationResult() {
-    }
-
-    public CrowdOptimizationResult(
-           CSWorker[] crowdServiceSelection,
-           Double totalReliability) {
-           this.crowdServiceSelection = crowdServiceSelection;
-           this.totalReliability = totalReliability;
-    }
-
+    @XmlElementRef(name = "crowdServiceSelection", namespace = "sg.edu.sutd", type = JAXBElement.class, required = false)
+    protected JAXBElement<CSWorkerList> crowdServiceSelection;
+    protected Double totalReliability;
 
     /**
-     * Gets the crowdServiceSelection value for this CrowdOptimizationResult.
+     * 获取crowdServiceSelection属性的值。
      * 
-     * @return crowdServiceSelection
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link CSWorkerList }{@code >}
+     *     
      */
-    public CSWorker[] getCrowdServiceSelection() {
+    public JAXBElement<CSWorkerList> getCrowdServiceSelection() {
         return crowdServiceSelection;
     }
 
-
     /**
-     * Sets the crowdServiceSelection value for this CrowdOptimizationResult.
+     * 设置crowdServiceSelection属性的值。
      * 
-     * @param crowdServiceSelection
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link CSWorkerList }{@code >}
+     *     
      */
-    public void setCrowdServiceSelection(CSWorker[] crowdServiceSelection) {
-        this.crowdServiceSelection = crowdServiceSelection;
+    public void setCrowdServiceSelection(JAXBElement<CSWorkerList> value) {
+        this.crowdServiceSelection = value;
     }
 
-
     /**
-     * Gets the totalReliability value for this CrowdOptimizationResult.
+     * 获取totalReliability属性的值。
      * 
-     * @return totalReliability
+     * @return
+     *     possible object is
+     *     {@link Double }
+     *     
      */
     public Double getTotalReliability() {
         return totalReliability;
     }
 
-
     /**
-     * Sets the totalReliability value for this CrowdOptimizationResult.
+     * 设置totalReliability属性的值。
      * 
-     * @param totalReliability
+     * @param value
+     *     allowed object is
+     *     {@link Double }
+     *     
      */
-    public void setTotalReliability(Double totalReliability) {
-        this.totalReliability = totalReliability;
-    }
-
-    private Object __equalsCalc = null;
-    public synchronized boolean equals(Object obj) {
-        if (!(obj instanceof CrowdOptimizationResult)) return false;
-        CrowdOptimizationResult other = (CrowdOptimizationResult) obj;
-        if (this == obj) return true;
-        if (__equalsCalc != null) {
-            return (__equalsCalc == obj);
-        }
-        __equalsCalc = obj;
-        boolean _equals;
-        _equals = ((this.crowdServiceSelection == null && other.getCrowdServiceSelection() == null) ||
-                (this.crowdServiceSelection != null &&
-                        java.util.Arrays.equals(this.crowdServiceSelection, other.getCrowdServiceSelection()))) &&
-                ((this.totalReliability == null && other.getTotalReliability() == null) ||
-                        (this.totalReliability != null &&
-                                this.totalReliability.equals(other.getTotalReliability())));
-        __equalsCalc = null;
-        return _equals;
-    }
-
-    private boolean __hashCodeCalc = false;
-    public synchronized int hashCode() {
-        if (__hashCodeCalc) {
-            return 0;
-        }
-        __hashCodeCalc = true;
-        int _hashCode = 1;
-        if (getCrowdServiceSelection() != null) {
-            for (int i=0;
-                 i<java.lang.reflect.Array.getLength(getCrowdServiceSelection());
-                 i++) {
-                Object obj = java.lang.reflect.Array.get(getCrowdServiceSelection(), i);
-                if (obj != null &&
-                    !obj.getClass().isArray()) {
-                    _hashCode += obj.hashCode();
-                }
-            }
-        }
-        if (getTotalReliability() != null) {
-            _hashCode += getTotalReliability().hashCode();
-        }
-        __hashCodeCalc = false;
-        return _hashCode;
-    }
-
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(CrowdOptimizationResult.class, true);
-
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdOptimizationResult"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("crowdServiceSelection");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "crowdServiceSelection"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", ">ArrayOfKeyValueOfstringArrayOfCrowdWorker8Qgdyvm9>KeyValueOfstringArrayOfCrowdWorker8Qgdyvm9"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(true);
-        elemField.setItemQName(new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/Arrays", "KeyValueOfstringArrayOfCrowdWorker8Qgdyvm9"));
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("totalReliability");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "totalReliability"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-    }
-
-    /**
-     * Return type metadata object
-     */
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
-
-    /**
-     * Get Custom Serializer
-     */
-    public static org.apache.axis.encoding.Serializer getSerializer(
-           String mechType,
-           Class _javaType,
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanSerializer(
-            _javaType, _xmlType, typeDesc);
-    }
-
-    /**
-     * Get Custom Deserializer
-     */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-           String mechType,
-           Class _javaType,
-           javax.xml.namespace.QName _xmlType) {
-        return 
-          new  org.apache.axis.encoding.ser.BeanDeserializer(
-            _javaType, _xmlType, typeDesc);
+    public void setTotalReliability(Double value) {
+        this.totalReliability = value;
     }
 
 }

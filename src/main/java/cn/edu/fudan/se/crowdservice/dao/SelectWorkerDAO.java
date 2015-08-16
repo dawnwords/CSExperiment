@@ -23,7 +23,7 @@ public class SelectWorkerDAO extends DAO<List<CrowdWorker>> {
             double cost = rs.getDouble(2);
             double reliability = rs.getDouble(3);
             long responseTime = rs.getInt(4);
-            all.add(new CrowdWorker(cost, id, reliability, responseTime, false));
+            all.add(new CrowdWorker().setCost(cost).setIndex(id).setReliability(reliability).setResponseTime(responseTime));
         }
         return all;
     }

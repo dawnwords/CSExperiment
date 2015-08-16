@@ -1,260 +1,149 @@
-/**
- * CrowdWorker.java
- * <p/>
- * This file was auto-generated from WSDL
- * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
- */
-
 package sutd.edu.sg;
 
-public class CrowdWorker implements java.io.Serializable {
-    // Type metadata
-    private static org.apache.axis.description.TypeDesc typeDesc =
-            new org.apache.axis.description.TypeDesc(CrowdWorker.class, true);
-
-    static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("sg.edu.sutd", "CrowdWorker"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cost");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "cost"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("index");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "index"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("reliability");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "reliability"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("responseTime");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "responseTime"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("selected");
-        elemField.setXmlName(new javax.xml.namespace.QName("sg.edu.sutd", "selected"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-    }
-
-    private Double cost;
-    private Integer index;
-    private Double reliability;
-    private Long responseTime;
-    private Boolean selected;
-    private Object __equalsCalc = null;
-    private boolean __hashCodeCalc = false;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 
 
-    public CrowdWorker(
-            Double cost,
-            Integer index,
-            Double reliability,
-            Long responseTime,
-            Boolean selected) {
-        this.cost = cost;
-        this.index = index;
-        this.reliability = reliability;
-        this.responseTime = responseTime;
-        this.selected = selected;
-    }
+/**
+ * <p>CrowdWorker complex type的 Java 类。
+ * <p/>
+ * <p>以下模式片段指定包含在此类中的预期内容。
+ * <p/>
+ * <pre>
+ * &lt;complexType name="CrowdWorker">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="cost" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+ *         &lt;element name="index" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *         &lt;element name="reliability" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+ *         &lt;element name="responseTime" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="selected" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "CrowdWorker", propOrder = {
+        "cost",
+        "index",
+        "reliability",
+        "responseTime",
+        "selected"
+})
+public class CrowdWorker {
+
+    protected Double cost;
+    protected Integer index;
+    protected Double reliability;
+    protected Long responseTime;
+    protected Boolean selected;
 
     /**
-     * Return type metadata object
-     */
-    public static org.apache.axis.description.TypeDesc getTypeDesc() {
-        return typeDesc;
-    }
-
-    /**
-     * Get Custom Serializer
-     */
-    public static org.apache.axis.encoding.Serializer getSerializer(
-            String mechType,
-            Class _javaType,
-            javax.xml.namespace.QName _xmlType) {
-        return
-                new org.apache.axis.encoding.ser.BeanSerializer(
-                        _javaType, _xmlType, typeDesc);
-    }
-
-    /**
-     * Get Custom Deserializer
-     */
-    public static org.apache.axis.encoding.Deserializer getDeserializer(
-            String mechType,
-            Class _javaType,
-            javax.xml.namespace.QName _xmlType) {
-        return
-                new org.apache.axis.encoding.ser.BeanDeserializer(
-                        _javaType, _xmlType, typeDesc);
-    }
-
-    /**
-     * Gets the cost value for this CrowdWorker.
+     * 获取cost属性的值。
      *
-     * @return cost
+     * @return possible object is
+     * {@link Double }
      */
     public Double getCost() {
         return cost;
     }
 
     /**
-     * Sets the cost value for this CrowdWorker.
+     * 设置cost属性的值。
      *
-     * @param cost
+     * @param value allowed object is
+     *              {@link Double }
      */
-    public void setCost(Double cost) {
-        this.cost = cost;
+    public CrowdWorker setCost(Double value) {
+        this.cost = value;
+        return this;
     }
 
     /**
-     * Gets the index value for this CrowdWorker.
+     * 获取index属性的值。
      *
-     * @return index
+     * @return possible object is
+     * {@link Integer }
      */
     public Integer getIndex() {
         return index;
     }
 
     /**
-     * Sets the index value for this CrowdWorker.
+     * 设置index属性的值。
      *
-     * @param index
+     * @param value allowed object is
+     *              {@link Integer }
      */
-    public void setIndex(Integer index) {
-        this.index = index;
+    public CrowdWorker setIndex(Integer value) {
+        this.index = value;
+        return this;
     }
 
     /**
-     * Gets the reliability value for this CrowdWorker.
+     * 获取reliability属性的值。
      *
-     * @return reliability
+     * @return possible object is
+     * {@link Double }
      */
     public Double getReliability() {
         return reliability;
     }
 
     /**
-     * Sets the reliability value for this CrowdWorker.
+     * 设置reliability属性的值。
      *
-     * @param reliability
+     * @param value allowed object is
+     *              {@link Double }
      */
-    public void setReliability(Double reliability) {
-        this.reliability = reliability;
+    public CrowdWorker setReliability(Double value) {
+        this.reliability = value;
+        return this;
     }
 
     /**
-     * Gets the responseTime value for this CrowdWorker.
+     * 获取responseTime属性的值。
      *
-     * @return responseTime
+     * @return possible object is
+     * {@link Long }
      */
     public Long getResponseTime() {
         return responseTime;
     }
 
     /**
-     * Sets the responseTime value for this CrowdWorker.
+     * 设置responseTime属性的值。
      *
-     * @param responseTime
+     * @param value allowed object is
+     *              {@link Long }
      */
-    public void setResponseTime(Long responseTime) {
-        this.responseTime = responseTime;
+    public CrowdWorker setResponseTime(Long value) {
+        this.responseTime = value;
+        return this;
     }
 
     /**
-     * Gets the selected value for this CrowdWorker.
+     * 获取selected属性的值。
      *
-     * @return selected
+     * @return possible object is
+     * {@link Boolean }
      */
-    public Boolean getSelected() {
+    public Boolean isSelected() {
         return selected;
     }
 
     /**
-     * Sets the selected value for this CrowdWorker.
+     * 设置selected属性的值。
      *
-     * @param selected
+     * @param value allowed object is
+     *              {@link Boolean }
      */
-    public void setSelected(Boolean selected) {
-        this.selected = selected;
+    public void setSelected(Boolean value) {
+        this.selected = value;
     }
 
-    public synchronized boolean equals(Object obj) {
-        if (!(obj instanceof CrowdWorker)) return false;
-        CrowdWorker other = (CrowdWorker) obj;
-        if (this == obj) return true;
-        if (__equalsCalc != null) {
-            return (__equalsCalc == obj);
-        }
-        __equalsCalc = obj;
-        boolean _equals;
-        _equals = ((this.cost == null && other.getCost() == null) ||
-                (this.cost != null &&
-                        this.cost.equals(other.getCost()))) &&
-                ((this.index == null && other.getIndex() == null) ||
-                        (this.index != null &&
-                                this.index.equals(other.getIndex()))) &&
-                ((this.reliability == null && other.getReliability() == null) ||
-                        (this.reliability != null &&
-                                this.reliability.equals(other.getReliability()))) &&
-                ((this.responseTime == null && other.getResponseTime() == null) ||
-                        (this.responseTime != null &&
-                                this.responseTime.equals(other.getResponseTime()))) &&
-                ((this.selected == null && other.getSelected() == null) ||
-                        (this.selected != null &&
-                                this.selected.equals(other.getSelected())));
-        __equalsCalc = null;
-        return _equals;
-    }
-
-    public synchronized int hashCode() {
-        if (__hashCodeCalc) {
-            return 0;
-        }
-        __hashCodeCalc = true;
-        int _hashCode = 1;
-        if (getCost() != null) {
-            _hashCode += getCost().hashCode();
-        }
-        if (getIndex() != null) {
-            _hashCode += getIndex().hashCode();
-        }
-        if (getReliability() != null) {
-            _hashCode += getReliability().hashCode();
-        }
-        if (getResponseTime() != null) {
-            _hashCode += getResponseTime().hashCode();
-        }
-        if (getSelected() != null) {
-            _hashCode += getSelected().hashCode();
-        }
-        __hashCodeCalc = false;
-        return _hashCode;
-    }
-
-    @Override
-    public String toString() {
-        return "CrowdWorker{" +
-                "selected=" + selected +
-                ", responseTime=" + responseTime +
-                ", reliability=" + reliability +
-                ", index=" + index +
-                ", cost=" + cost +
-                '}';
-    }
 }

@@ -1,12 +1,12 @@
 package cn.edu.fudan.se.crowdservice.dao;
 
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 import cn.edu.fudan.se.crowdservice.datagen.WorkerCostGen;
 import cn.edu.fudan.se.crowdservice.datagen.WorkerReliabilityGen;
 import cn.edu.fudan.se.crowdservice.datagen.WorkerResponseTimeGen;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.Random;
 
 /**
  * Created by Dawnwords on 2015/8/6.

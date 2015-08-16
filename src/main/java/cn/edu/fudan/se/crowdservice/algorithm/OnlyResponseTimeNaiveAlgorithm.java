@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class OnlyResponseTimeNaiveAlgorithm extends NaiveAlgorithm {
 
-    protected OnlyResponseTimeNaiveAlgorithm() {
+    public OnlyResponseTimeNaiveAlgorithm() {
         super(new Comparator<CrowdWorker>() {
             public int compare(CrowdWorker arg0, CrowdWorker arg1) {
                 return arg0.getResponseTime().compareTo(arg1.getResponseTime());

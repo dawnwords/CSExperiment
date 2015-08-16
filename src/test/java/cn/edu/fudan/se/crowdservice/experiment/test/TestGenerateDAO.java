@@ -2,11 +2,10 @@ package cn.edu.fudan.se.crowdservice.experiment.test;
 
 import cn.edu.fudan.se.crowdservice.bean.CrowdWorkerGroups;
 import cn.edu.fudan.se.crowdservice.dao.*;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 import org.junit.Before;
 import org.junit.Test;
 import sutd.edu.sg.CrowdWorker;
-
-import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  * Created by Dawnwords on 2015/8/6.
  */
 public class TestGenerateDAO {
-    Random random = new Random(123);
+    Random random = new Random(123456789);
 
     @Before
     public void resetDB() {

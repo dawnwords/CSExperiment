@@ -1,8 +1,8 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
 import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 
-import java.util.Random;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -12,7 +12,7 @@ public class ExperimentInput {
     private int expId;
     private int cs1ResultNum, cs2ResultNum;
     private int cs1GroupNum, cs2GroupNum;
-    private Random random;
+    private Random random, reliability;
     private TimeCost timeCost;
 
     public int expId() {
@@ -75,6 +75,15 @@ public class ExperimentInput {
 
     public ExperimentInput random(Random random) {
         this.random = random;
+        return this;
+    }
+
+    public double reliability() {
+        return reliability.nextDouble();
+    }
+
+    public ExperimentInput reliability(Random reliability) {
+        this.reliability = reliability;
         return this;
     }
 

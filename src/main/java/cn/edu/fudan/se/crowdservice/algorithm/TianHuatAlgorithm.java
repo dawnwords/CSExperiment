@@ -14,18 +14,22 @@ import java.util.*;
  * Created by Dawnwords on 2015/8/6.
  */
 public class TianHuatAlgorithm implements Algorithm {
-    private static final int ITERATION_NUM = 500;
+    private static final int ITERATION_NUM = 1000;
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        List<CrowdWorker> crowdWorkers = workerSelection(parameter);
-        double cost = 0;
-        long time = 0;
-        for (CrowdWorker worker : crowdWorkers) {
-            cost += worker.getCost();
-            time = Math.max(time, worker.getResponseTime());
+        try {
+            List<CrowdWorker> crowdWorkers = workerSelection(parameter);
+            double cost = 0;
+            long time = 0;
+            for (CrowdWorker worker : crowdWorkers) {
+                cost += worker.getCost();
+                time = Math.max(time, worker.getResponseTime());
+            }
+            return new TimeCost().cost(cost).time(time);
+        } catch (Exception e){
+            throw new RuntimeException("Global Optimization Fails");
         }
-        return new TimeCost().cost(cost).time(time);
     }
 
     @Override
@@ -40,10 +44,12 @@ public class TianHuatAlgorithm implements Algorithm {
                     parameter.workerArray(),
                     parameter.resultNumArray(),
                     ITERATION_NUM);
+            restoreIndex(parameter.workers(), indexMap);
             CSWorker[] crowdServiceSelection = result.getCrowdServiceSelection();
             if (crowdServiceSelection.length == 0) {
-                throw new RuntimeException("crowdServiceSelection.length == 0");
+                throw new RuntimeException("Worker Selection: Fails");
             }
+
             CSWorker cw = crowdServiceSelection[0];
             List<Integer> index = indexMap.get(cw.getKey());
             for (CrowdWorker worker : cw.getValue()) {
@@ -70,5 +76,14 @@ public class TianHuatAlgorithm implements Algorithm {
             result.put(worker.getKey(), value);
         }
         return result;
+    }
+
+    private void restoreIndex(List<CSWorker> workers, Map<String, List<Integer>> indexMap) {
+        for (CSWorker worker : workers) {
+            List<Integer> index = indexMap.get(worker.getKey());
+            for (CrowdWorker w : worker.getValue()) {
+                w.setIndex(index.get(w.getIndex()));
+            }
+        }
     }
 }

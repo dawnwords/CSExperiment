@@ -3,7 +3,6 @@ package cn.edu.fudan.se.crowdservice.explogic;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
-import cn.edu.fudan.se.crowdservice.dao.SelectExpResultDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
 import cn.edu.fudan.se.crowdservice.util.Logger;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
@@ -26,7 +25,7 @@ public class Experiment {
         this.input = input;
     }
 
-    public ExpResult preform() {
+    public void preform() {
         CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
                 .cs1GroupNum(input.cs1GroupNum())
                 .cs2GroupNum(input.cs2GroupNum())
@@ -50,10 +49,14 @@ public class Experiment {
                 .workers(Collections.singletonList(new CSWorker(BPELXml.CS2_NAME, workerGroups.cs2GroupArray())))
                 .resultNums(Collections.singletonList(new CSResultNum(BPELXml.CS2_NAME, input.cs2ResultNum())));
 
-        executeCS("CS1", cs1GP, cs1WS);
-        executeCS("CS2", cs2GP, cs2GP);
-
-        return new SelectExpResultDAO().getResult();
+        try {
+            input.random().logCount();
+            executeCS("CS1", cs1GP, cs1WS);
+            input.random().logCount();
+            executeCS("CS2", cs2GP, cs2GP);
+        } catch (Exception e) {
+            Logger.info(e.getMessage());
+        }
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
@@ -75,7 +78,7 @@ public class Experiment {
         TimeCost realTC = new TimeCost();
         int realResultNum = 0;
         for (CrowdWorker worker : selectedWorkers) {
-            boolean success = worker.getReliability() > input.random().nextDouble() &&
+            boolean success = worker.getReliability() > input.reliability() &&
                     worker.getResponseTime() < planTC.time();
             expStatus.add(new ExpStatus()
                     .expid(input.expId())

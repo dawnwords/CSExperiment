@@ -9,6 +9,7 @@ import cn.edu.fudan.se.crowdservice.bean.TimeCost;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerDAO;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.ResetDBDAO;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 import cn.edu.fudan.se.crowdservice.explogic.BPELXml;
 import cn.edu.fudan.se.crowdservice.util.Logger;
 import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
@@ -19,7 +20,6 @@ import sutd.edu.sg.CrowdWorker;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.Assert.assertTrue;
 
@@ -42,7 +42,7 @@ public class TestAlgorithm {
     }
 
     private void testAlgorithm(Algorithm algorithm) {
-        Random random = new Random(1235);
+        Random random = new Random(123456);
         new ResetDBDAO().getResult();
         new GenerateWorkerDAO().random(random).workerNumber(100).getResult();
         CrowdWorkerGroups groups = new GenerateWorkerGroupDAO().random(random).cs1GroupNum(40).cs2GroupNum(60).getResult();

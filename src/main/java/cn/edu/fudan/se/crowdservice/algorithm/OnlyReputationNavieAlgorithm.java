@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class OnlyReputationNavieAlgorithm extends NaiveAlgorithm {
 
-    protected OnlyReputationNavieAlgorithm() {
+    public OnlyReputationNavieAlgorithm() {
         super(new Comparator<CrowdWorker>() {
             public int compare(CrowdWorker arg0, CrowdWorker arg1) {
                 return -arg0.getReliability().compareTo(arg1.getReliability());

@@ -3,13 +3,13 @@ package cn.edu.fudan.se.crowdservice.dao;
 import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
 import cn.edu.fudan.se.crowdservice.bean.ExperimentInput;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Dawnwords on 2015/8/7.
@@ -17,7 +17,6 @@ import java.util.Random;
 public class SelectExperimentInputDAO extends DAO<List<ExperimentInput>> {
 
     private int cs1GroupNum, cs2GroupNum;
-    private Random random;
     private Algorithm algorithm;
 
     public SelectExperimentInputDAO cs1GroupNum(int cs1GropuNum) {
@@ -27,11 +26,6 @@ public class SelectExperimentInputDAO extends DAO<List<ExperimentInput>> {
 
     public SelectExperimentInputDAO cs2GroupNum(int cs2GroupNum) {
         this.cs2GroupNum = cs2GroupNum;
-        return this;
-    }
-
-    public SelectExperimentInputDAO random(Random random) {
-        this.random = random;
         return this;
     }
 
@@ -50,7 +44,6 @@ public class SelectExperimentInputDAO extends DAO<List<ExperimentInput>> {
                     .cs1GroupNum(cs1GroupNum)
                     .cs2GroupNum(cs2GroupNum)
                     .algorithm(algorithm)
-                    .random(random)
                     .expId(rs.getInt(1))
                     .timeCost(new TimeCost()
                             .cost(rs.getDouble(2))

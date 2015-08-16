@@ -48,7 +48,7 @@ public class UpdateTimeCostResultNumDAO extends DAO<Boolean> {
                 cs + "realcost=?, " +
                 cs + "realResultNum=?, " +
                 cs + "success=(" +
-                cs + "resultNum = ?) WHERE id = ?";
+                cs + "resultNum <= ?) WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         int i = 0;
         ps.setLong(++i, planTC.time());

@@ -2,11 +2,11 @@ package cn.edu.fudan.se.crowdservice.dao;
 
 import cn.edu.fudan.se.crowdservice.datagen.CostGen;
 import cn.edu.fudan.se.crowdservice.datagen.DeadlineGen;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 import cn.edu.fudan.se.crowdservice.datagen.ResultNumGen;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.Random;
 
 /**
  * Created by Dawnwords on 2015/8/6.

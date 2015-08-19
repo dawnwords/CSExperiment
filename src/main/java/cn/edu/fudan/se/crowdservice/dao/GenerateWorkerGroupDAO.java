@@ -1,8 +1,8 @@
 package cn.edu.fudan.se.crowdservice.dao;
 
+import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
 import cn.edu.fudan.se.crowdservice.bean.CrowdWorkerGroups;
 import cn.edu.fudan.se.crowdservice.datagen.Random;
-import sutd.edu.sg.CrowdWorker;
 
 import java.sql.Connection;
 import java.util.Collections;

@@ -55,6 +55,13 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `cs2realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs2realResultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs2success` BIT(1) DEFAULT NULL,\n" +
+                    "  `cs3resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs3deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3cost` DOUBLE(20,2) DEFAULT NULL,\n" +
+                    "  `cs3realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3realResultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3success` BIT(1) DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
                     ") ENGINE=InnoDB AUTO_INCREMENT=0 CHARSET=utf8");
         }

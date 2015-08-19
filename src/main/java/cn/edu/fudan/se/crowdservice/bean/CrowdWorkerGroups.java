@@ -1,7 +1,5 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
-import sutd.edu.sg.CrowdWorker;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +9,12 @@ import java.util.List;
 public class CrowdWorkerGroups {
     List<CrowdWorker> cs1Group;
     List<CrowdWorker> cs2Group;
+    List<CrowdWorker> cs3Group;
 
     public CrowdWorkerGroups() {
         this.cs1Group = new ArrayList<>();
         this.cs2Group = new ArrayList<>();
+        this.cs3Group = new ArrayList<>();
     }
 
     public CrowdWorkerGroups addCS1Worker(CrowdWorker worker) {
@@ -27,19 +27,20 @@ public class CrowdWorkerGroups {
         return this;
     }
 
-    public List<CrowdWorker> cs1Group() {
-        return cs1Group;
+    public CrowdWorkerGroups addCS3Worker(CrowdWorker worker) {
+        cs3Group.add(worker);
+        return this;
     }
 
-    public CrowdWorker[] cs1GroupArray() {
-        return cs1Group.toArray(new CrowdWorker[cs1Group.size()]);
+    public List<CrowdWorker> cs1Group() {
+        return cs1Group;
     }
 
     public List<CrowdWorker> cs2Group() {
         return cs2Group;
     }
 
-    public CrowdWorker[] cs2GroupArray() {
-        return cs2Group.toArray(new CrowdWorker[cs2Group.size()]);
+    public List<CrowdWorker> cs3Group() {
+        return cs3Group;
     }
 }

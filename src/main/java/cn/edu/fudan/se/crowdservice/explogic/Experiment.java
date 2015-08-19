@@ -1,13 +1,11 @@
 package cn.edu.fudan.se.crowdservice.explogic;
 
+import cn.edu.fudan.se.crowdservice.algorithm.ServiceWorkers;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
 import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
 import cn.edu.fudan.se.crowdservice.util.Logger;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
-import sutd.edu.sg.CrowdWorker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,21 +31,21 @@ public class Experiment {
         AlgorithmParameter cs1GP = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1_CS2)
                 .workers(Arrays.asList(
-                        new CSWorker(BPELXml.CS1_NAME, workerGroups.cs1GroupArray()),
-                        new CSWorker(BPELXml.CS2_NAME, workerGroups.cs2GroupArray())
+                        new ServiceWorkers().service(BPELXml.CS1_NAME).workers(workerGroups.cs1Group()),
+                        new ServiceWorkers().service(BPELXml.CS2_NAME).workers(workerGroups.cs2Group())
                 ))
                 .resultNums(Arrays.asList(
-                        new CSResultNum(BPELXml.CS1_NAME, input.cs1ResultNum()),
-                        new CSResultNum(BPELXml.CS2_NAME, input.cs2ResultNum())
+                        new ServiceResultNum().service(BPELXml.CS1_NAME).resultNum(input.cs1ResultNum()),
+                        new ServiceResultNum().service(BPELXml.CS2_NAME).resultNum(input.cs2ResultNum())
                 ));
         AlgorithmParameter cs1WS = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS1)
-                .workers(Collections.singletonList(new CSWorker(BPELXml.CS1_NAME, workerGroups.cs1GroupArray())))
-                .resultNums(Collections.singletonList(new CSResultNum(BPELXml.CS1_NAME, input.cs1ResultNum())));
+                .workers(Collections.singletonList(new ServiceWorkers().service(BPELXml.CS1_NAME).workers(workerGroups.cs1Group())))
+                .resultNums(Collections.singletonList(new ServiceResultNum().service(BPELXml.CS1_NAME).resultNum(input.cs1ResultNum())));
         AlgorithmParameter cs2GP = new AlgorithmParameter()
                 .compositeServiceXML(BPELXml.CS2)
-                .workers(Collections.singletonList(new CSWorker(BPELXml.CS2_NAME, workerGroups.cs2GroupArray())))
-                .resultNums(Collections.singletonList(new CSResultNum(BPELXml.CS2_NAME, input.cs2ResultNum())));
+                .workers(Collections.singletonList(new ServiceWorkers().service(BPELXml.CS2_NAME).workers(workerGroups.cs2Group())))
+                .resultNums(Collections.singletonList(new ServiceResultNum().service(BPELXml.CS2_NAME).resultNum(input.cs2ResultNum())));
 
         try {
             input.random().logCount();
@@ -78,16 +76,16 @@ public class Experiment {
         TimeCost realTC = new TimeCost();
         int realResultNum = 0;
         for (CrowdWorker worker : selectedWorkers) {
-            boolean success = worker.getReliability() > input.reliability() &&
-                    worker.getResponseTime() < planTC.time();
+            boolean success = worker.reliability() > input.reliability() &&
+                    worker.responseTime() < planTC.time();
             expStatus.add(new ExpStatus()
                     .expid(input.expId())
-                    .workerid(worker.getIndex())
+                    .workerid(worker.index())
                     .cs(cs)
                     .selected(true)
                     .success(success));
             if (success) {
-                realTC.aggregate(worker.getResponseTime(), worker.getCost());
+                realTC.aggregate(worker.responseTime(), worker.cost());
                 realResultNum++;
             }
         }

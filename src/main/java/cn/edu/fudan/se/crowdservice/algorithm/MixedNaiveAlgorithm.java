@@ -1,6 +1,7 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
-import sutd.edu.sg.CrowdWorker;
+
+import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
 
 import java.util.Comparator;
 
@@ -13,8 +14,8 @@ public class MixedNaiveAlgorithm extends NaiveAlgorithm {
     public MixedNaiveAlgorithm() {
         super(new Comparator<CrowdWorker>() {
             public int compare(CrowdWorker arg0, CrowdWorker arg1) {
-                Double d1 = arg0.getReliability() * coe_rep - arg0.getResponseTime() * coe_res - arg0.getCost() * coe_cost;
-                Double d2 = arg1.getReliability() * coe_rep - arg1.getResponseTime() * coe_res - arg1.getCost() * coe_cost;
+                Double d1 = arg0.reliability() * coe_rep - arg0.responseTime() * coe_res - arg0.cost() * coe_cost;
+                Double d2 = arg1.reliability() * coe_rep - arg1.responseTime() * coe_res - arg1.cost() * coe_cost;
                 return -d1.compareTo(d2);
             }
         });

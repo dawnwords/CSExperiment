@@ -1,7 +1,7 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
+
+import cn.edu.fudan.se.crowdservice.algorithm.ServiceWorkers;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import java.util.List;
 public class AlgorithmParameter {
     private String compositeServiceXML;
     private TimeCost timeCost;
-    private List<CSWorker> workers;
-    private List<CSResultNum> resultNums;
+    private List<ServiceWorkers> workers;
+    private List<ServiceResultNum> resultNums;
 
     public String compositeServiceXML() {
         return compositeServiceXML;
@@ -36,34 +36,27 @@ public class AlgorithmParameter {
         return this;
     }
 
-    public List<CSWorker> workers() {
+    public List<ServiceWorkers> workers() {
         if (workers == null) {
             throw new NullPointerException("workers is null");
         }
         return workers;
     }
 
-    public CSWorker[] workerArray() {
-        return workers().toArray(new CSWorker[workers().size()]);
-    }
 
-    public AlgorithmParameter workers(List<CSWorker> workers) {
+    public AlgorithmParameter workers(List<ServiceWorkers> workers) {
         this.workers = workers;
         return this;
     }
 
-    public CSResultNum[] resultNumArray() {
-        return resultNums().toArray(new CSResultNum[resultNums().size()]);
-    }
-
-    public List<CSResultNum> resultNums() {
+    public List<ServiceResultNum> resultNums() {
         if (resultNums == null) {
             throw new NullPointerException("resultNums is null");
         }
         return resultNums;
     }
 
-    public AlgorithmParameter resultNums(List<CSResultNum> resultNums) {
+    public AlgorithmParameter resultNums(List<ServiceResultNum> resultNums) {
         this.resultNums = resultNums;
         return this;
     }
@@ -74,11 +67,11 @@ public class AlgorithmParameter {
                 "\n compositeServiceXML:\n" + compositeServiceXML +
                 "\n timecost:" + timeCost +
                 "\n workers: [\n";
-        for (CSWorker worker : workers) {
+        for (ServiceWorkers worker : workers) {
             result += worker.toString() + "\n";
         }
         result += " ]\n resultnums:[\n";
-        for (CSResultNum resultNum : resultNums) {
+        for (ServiceResultNum resultNum : resultNums) {
             result += resultNum.toString() + "\n";
         }
         return result + " ]\n}";

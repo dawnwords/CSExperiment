@@ -1,11 +1,10 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
 import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
+import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
+import cn.edu.fudan.se.crowdservice.bean.ServiceResultNum;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
 import cn.edu.fudan.se.crowdservice.util.Logger;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSResultNum;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
-import sutd.edu.sg.CrowdWorker;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,19 +20,20 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        List<CSWorker> csWorkers = rank(parameter);
-        TimeCost[] timeCosts = new TimeCost[csWorkers.size()];
+        List<ServiceWorkers> serviceWorkers = rank(parameter);
+        TimeCost[] timeCosts = new TimeCost[serviceWorkers.size()];
 
         long timeTotal = 0;
         double costTotal = 0;
         for (int i = 0; i < timeCosts.length; i++) {
             timeCosts[i] = new TimeCost();
-            CrowdWorker[] cw = csWorkers.get(i).getValue();
-            int resultNum = parameter.resultNumArray()[i].getValue();
-            for (int j = 0; j < cw.length && j < resultNum; j++) {
-                timeCosts[i].aggregate(cw[j].getResponseTime(), cw[j].getCost());
+            List<CrowdWorker> cw = serviceWorkers.get(i).workers();
+            int resultNum = parameter.resultNums().get(i).resultNum();
+            for (int j = 0; j < cw.size() && j < resultNum; j++) {
+                CrowdWorker crowdWorker = cw.get(j);
+                timeCosts[i].aggregate(crowdWorker.responseTime(), crowdWorker.cost());
             }
-            Logger.info(parameter.resultNumArray()[i].getKey() + " : " + timeCosts[i]);
+            Logger.info(parameter.resultNums().get(i).service() + " : " + timeCosts[i]);
             timeTotal += timeCosts[i].time();
             costTotal += timeCosts[i].cost();
         }
@@ -44,36 +44,36 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
-        CrowdWorker[] cw = rank(parameter).get(0).getValue();
+        List<CrowdWorker> cw = rank(parameter).get(0).workers();
         double totalCost = parameter.cost();
         ArrayList<CrowdWorker> result = new ArrayList<>();
         for (CrowdWorker worker : cw) {
-            if (totalCost > worker.getCost()) {
-                totalCost -= worker.getCost();
+            if (totalCost > worker.cost()) {
+                totalCost -= worker.cost();
                 result.add(worker);
             }
         }
         return result;
     }
 
-    public List<CSWorker> rank(AlgorithmParameter parameter) {
-        List<CSResultNum> csResultNums = parameter.resultNums();
-        List<CSWorker> csw = parameter.workers();
-        List<CSWorker> result = new ArrayList<>();
+    public List<ServiceWorkers> rank(AlgorithmParameter parameter) {
+        List<ServiceResultNum> serviceResultNums = parameter.resultNums();
+        List<ServiceWorkers> csw = parameter.workers();
+        List<ServiceWorkers> result = new ArrayList<>();
 
-        for (int i = 0; i < csResultNums.size(); i++) {
-            CSWorker csWorker = csw.get(i);
-            CrowdWorker[] cw = csWorker.getValue();
+        for (int i = 0; i < serviceResultNums.size(); i++) {
+            ServiceWorkers serviceWorkers = csw.get(i);
+            List<CrowdWorker> cw = serviceWorkers.workers();
 
             List<CrowdWorker> newcw = new ArrayList<>();
             for (CrowdWorker w : cw) {
-                if (w.getResponseTime() < parameter.deadline()) {
+                if (w.responseTime() < parameter.deadline()) {
                     newcw.add(w);
                 }
             }
 
             Collections.sort(newcw, comparator);
-            result.add(new CSWorker(csWorker.getKey(), newcw.toArray(new CrowdWorker[newcw.size()])));
+            result.add(new ServiceWorkers().service(serviceWorkers.service()).workers(newcw));
         }
         return result;
     }

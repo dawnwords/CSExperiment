@@ -1,13 +1,8 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
-import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
-import cn.edu.fudan.se.crowdservice.bean.TimeCost;
-import com.microsoft.schemas._2003._10.Serialization.Arrays.CSWorker;
-import sutd.edu.sg.CrowdOptimizationResult;
-import sutd.edu.sg.CrowdServiceProxy;
-import sutd.edu.sg.CrowdWorker;
+import cn.edu.fudan.se.crowdservice.bean.*;
+import cn.edu.fudan.se.crowdservice.thstub.THServiceStub;
 
-import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -23,11 +18,11 @@ public class TianHuatAlgorithm implements Algorithm {
             double cost = 0;
             long time = 0;
             for (CrowdWorker worker : crowdWorkers) {
-                cost += worker.getCost();
-                time = Math.max(time, worker.getResponseTime());
+                cost += worker.cost();
+                time = Math.max(time, worker.responseTime());
             }
             return new TimeCost().cost(cost).time(time);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Global Optimization Fails");
         }
     }
@@ -36,53 +31,49 @@ public class TianHuatAlgorithm implements Algorithm {
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
         List<CrowdWorker> crowdWorkers = new LinkedList<>();
         Map<String, List<Integer>> indexMap = saveIndex(parameter.workers());
-        try {
-            CrowdOptimizationResult result = new CrowdServiceProxy().globalOptimize(
-                    parameter.compositeServiceXML(),
-                    parameter.deadline(),
-                    parameter.cost(),
-                    parameter.workerArray(),
-                    parameter.resultNumArray(),
-                    ITERATION_NUM);
-            restoreIndex(parameter.workers(), indexMap);
-            CSWorker[] crowdServiceSelection = result.getCrowdServiceSelection();
-            if (crowdServiceSelection.length == 0) {
-                throw new RuntimeException("Worker Selection: Fails");
-            }
+        OptimizationResult result = new THServiceStub().globalOptimize(
+                parameter.compositeServiceXML(),
+                parameter.deadline(),
+                parameter.cost(),
+                parameter.workers(),
+                parameter.resultNums(),
+                ITERATION_NUM);
+        restoreIndex(parameter.workers(), indexMap);
+        List<WorkerSelectionResult> crowdServiceSelection = result.selectionResult();
+        if (crowdServiceSelection.size() == 0) {
+            throw new RuntimeException("Worker Selection: Fails");
+        }
 
-            CSWorker cw = crowdServiceSelection[0];
-            List<Integer> index = indexMap.get(cw.getKey());
-            for (CrowdWorker worker : cw.getValue()) {
-                worker.setIndex(index.get(worker.getIndex()));
-                if (worker.getSelected()) {
-                    crowdWorkers.add(worker);
-                }
+        WorkerSelectionResult cw = crowdServiceSelection.get(0);
+        List<Integer> index = indexMap.get(cw.service());
+        for (CrowdWorker worker : cw.workers()) {
+            worker.index(index.get(worker.index()));
+            if (worker.selected()) {
+                crowdWorkers.add(worker);
             }
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
         }
         return crowdWorkers;
     }
 
-    private Map<String, List<Integer>> saveIndex(List<CSWorker> workers) {
+    private Map<String, List<Integer>> saveIndex(List<ServiceWorkers> workers) {
         Map<String, List<Integer>> result = new HashMap<>();
-        for (CSWorker worker : workers) {
+        for (ServiceWorkers worker : workers) {
             ArrayList<Integer> value = new ArrayList<>();
             int i = 0;
-            for (CrowdWorker w : worker.getValue()) {
-                value.add(w.getIndex());
-                w.setIndex(i++);
+            for (CrowdWorker w : worker.workers()) {
+                value.add(w.index());
+                w.index(i++);
             }
-            result.put(worker.getKey(), value);
+            result.put(worker.service(), value);
         }
         return result;
     }
 
-    private void restoreIndex(List<CSWorker> workers, Map<String, List<Integer>> indexMap) {
-        for (CSWorker worker : workers) {
-            List<Integer> index = indexMap.get(worker.getKey());
-            for (CrowdWorker w : worker.getValue()) {
-                w.setIndex(index.get(w.getIndex()));
+    private void restoreIndex(List<ServiceWorkers> workers, Map<String, List<Integer>> indexMap) {
+        for (ServiceWorkers worker : workers) {
+            List<Integer> index = indexMap.get(worker.service());
+            for (CrowdWorker w : worker.workers()) {
+                w.index(index.get(w.index()));
             }
         }
     }

@@ -1,6 +1,7 @@
 package cn.edu.fudan.se.crowdservice.dao;
 
-import sutd.edu.sg.CrowdWorker;
+
+import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ public class SelectWorkerDAO extends DAO<List<CrowdWorker>> {
             double cost = rs.getDouble(2);
             double reliability = rs.getDouble(3);
             long responseTime = rs.getInt(4);
-            all.add(new CrowdWorker(cost, id, reliability, responseTime, false));
+            all.add(new CrowdWorker().cost(cost).index(id).reliability(reliability).responseTime(responseTime).selected(false));
         }
         return all;
     }

@@ -1,7 +1,5 @@
 package cn.edu.fudan.se.crowdservice.datagen;
 
-import cn.edu.fudan.se.crowdservice.util.Logger;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -25,9 +23,5 @@ public class Random {
     public double nextDouble() {
         count.incrementAndGet();
         return RANDOM.nextDouble();
-    }
-
-    public void logCount() {
-        Logger.info("[Random count] %d", count.get());
     }
 }

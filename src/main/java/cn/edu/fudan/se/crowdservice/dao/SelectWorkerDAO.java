@@ -25,6 +25,7 @@ public class SelectWorkerDAO extends DAO<List<CrowdWorker>> {
             double reliability = rs.getDouble(3);
             long responseTime = rs.getInt(4);
             all.add(new CrowdWorker().cost(cost).index(id).reliability(reliability).responseTime(responseTime).selected(false));
+
         }
         return all;
     }

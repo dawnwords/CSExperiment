@@ -1,7 +1,6 @@
 package cn.edu.fudan.se.crowdservice.explogic;
 
 import cn.edu.fudan.se.crowdservice.Parameter;
-import cn.edu.fudan.se.crowdservice.bean.ServiceWorkers;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
@@ -49,9 +48,7 @@ public class Experiment {
                 .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())));
 
         try {
-            input.random().logCount();
             executeCS("CS1", cs1GP, cs1WS);
-            input.random().logCount();
             executeCS("CS2", cs2GP, cs2GP);
         } catch (Exception e) {
             Logger.info(e.getMessage());

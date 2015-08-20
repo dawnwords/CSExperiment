@@ -1,9 +1,11 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
+import cn.edu.fudan.se.crowdservice.Parameter;
 import cn.edu.fudan.se.crowdservice.bean.*;
-import cn.edu.fudan.se.crowdservice.thstub.THServiceStub;
 
-import java.util.*;
+import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -30,24 +32,20 @@ public class TianHuatAlgorithm implements Algorithm {
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
         List<CrowdWorker> crowdWorkers = new LinkedList<>();
-        Map<String, List<Integer>> indexMap = saveIndex(parameter.workers());
-        OptimizationResult result = new THServiceStub().globalOptimize(
-                parameter.compositeServiceXML(),
+        OptimizationResult result = globalOptimize(
+                parameter.bpelPath(),
                 parameter.deadline(),
                 parameter.cost(),
                 parameter.workers(),
                 parameter.resultNums(),
                 ITERATION_NUM);
-        restoreIndex(parameter.workers(), indexMap);
         List<WorkerSelectionResult> crowdServiceSelection = result.selectionResult();
         if (crowdServiceSelection.size() == 0) {
             throw new RuntimeException("Worker Selection: Fails");
         }
 
         WorkerSelectionResult cw = crowdServiceSelection.get(0);
-        List<Integer> index = indexMap.get(cw.service());
         for (CrowdWorker worker : cw.workers()) {
-            worker.index(index.get(worker.index()));
             if (worker.selected()) {
                 crowdWorkers.add(worker);
             }
@@ -55,26 +53,27 @@ public class TianHuatAlgorithm implements Algorithm {
         return crowdWorkers;
     }
 
-    private Map<String, List<Integer>> saveIndex(List<ServiceWorkers> workers) {
-        Map<String, List<Integer>> result = new HashMap<>();
-        for (ServiceWorkers worker : workers) {
-            ArrayList<Integer> value = new ArrayList<>();
-            int i = 0;
-            for (CrowdWorker w : worker.workers()) {
-                value.add(w.index());
-                w.index(i++);
+    private OptimizationResult globalOptimize(String bpelPath, long deadline, double cost, List<ServiceWorkers> csWorkers,
+                                              List<ServiceResultNum> csResultNums, int iterationNum) {
+        try {
+            PrintWriter parameter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(Parameter.instance().parameterPath(), false)));
+            parameter.printf("time=%d,cost=%f,numOfGeneration=%d\n", deadline, cost, iterationNum);
+            parameter.println("===");
+            for (ServiceWorkers sw : csWorkers) {
+                parameter.println(sw);
             }
-            result.put(worker.service(), value);
-        }
-        return result;
-    }
+            parameter.println("===");
+            for (ServiceResultNum sr : csResultNums) {
+                parameter.println(sr);
+            }
+            parameter.flush();
+            parameter.close();
 
-    private void restoreIndex(List<ServiceWorkers> workers, Map<String, List<Integer>> indexMap) {
-        for (ServiceWorkers worker : workers) {
-            List<Integer> index = indexMap.get(worker.service());
-            for (CrowdWorker w : worker.workers()) {
-                w.index(index.get(w.index()));
-            }
+            String command = String.format("%s \"%s\" \"%s\"", Parameter.instance().thServicePath(), bpelPath, Parameter.instance().parameterPath());
+            Process service = Runtime.getRuntime().exec(command);
+            return new OptimizationResult().build(new BufferedReader(new InputStreamReader(service.getInputStream())));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

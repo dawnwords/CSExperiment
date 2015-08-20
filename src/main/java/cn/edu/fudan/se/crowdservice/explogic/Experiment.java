@@ -1,6 +1,7 @@
 package cn.edu.fudan.se.crowdservice.explogic;
 
-import cn.edu.fudan.se.crowdservice.algorithm.ServiceWorkers;
+import cn.edu.fudan.se.crowdservice.Parameter;
+import cn.edu.fudan.se.crowdservice.bean.ServiceWorkers;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpStatusDAO;
@@ -29,23 +30,23 @@ public class Experiment {
                 .cs2GroupNum(input.cs2GroupNum())
                 .random(input.random()).getResult();
         AlgorithmParameter cs1GP = new AlgorithmParameter()
-                .compositeServiceXML(BPELXml.CS1_CS2)
+                .bpelPath(Parameter.instance().cs1cs2Path())
                 .workers(Arrays.asList(
-                        new ServiceWorkers().service(BPELXml.CS1_NAME).workers(workerGroups.cs1Group()),
-                        new ServiceWorkers().service(BPELXml.CS2_NAME).workers(workerGroups.cs2Group())
+                        new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group()),
+                        new ServiceWorkers().service(Parameter.instance().cs2Name()).workers(workerGroups.cs2Group())
                 ))
                 .resultNums(Arrays.asList(
-                        new ServiceResultNum().service(BPELXml.CS1_NAME).resultNum(input.cs1ResultNum()),
-                        new ServiceResultNum().service(BPELXml.CS2_NAME).resultNum(input.cs2ResultNum())
+                        new ServiceResultNum().service(Parameter.instance().cs1Name()).resultNum(input.cs1ResultNum()),
+                        new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())
                 ));
         AlgorithmParameter cs1WS = new AlgorithmParameter()
-                .compositeServiceXML(BPELXml.CS1)
-                .workers(Collections.singletonList(new ServiceWorkers().service(BPELXml.CS1_NAME).workers(workerGroups.cs1Group())))
-                .resultNums(Collections.singletonList(new ServiceResultNum().service(BPELXml.CS1_NAME).resultNum(input.cs1ResultNum())));
+                .bpelPath(Parameter.instance().cs1Path())
+                .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group())))
+                .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs1Name()).resultNum(input.cs1ResultNum())));
         AlgorithmParameter cs2GP = new AlgorithmParameter()
-                .compositeServiceXML(BPELXml.CS2)
-                .workers(Collections.singletonList(new ServiceWorkers().service(BPELXml.CS2_NAME).workers(workerGroups.cs2Group())))
-                .resultNums(Collections.singletonList(new ServiceResultNum().service(BPELXml.CS2_NAME).resultNum(input.cs2ResultNum())));
+                .bpelPath(Parameter.instance().cs2Path())
+                .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs2Name()).workers(workerGroups.cs2Group())))
+                .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())));
 
         try {
             input.random().logCount();

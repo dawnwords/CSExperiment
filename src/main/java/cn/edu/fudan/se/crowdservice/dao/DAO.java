@@ -19,7 +19,7 @@ public abstract class DAO<T> {
     }
 
     private Connection connect() throws SQLException {
-        return DriverManager.getConnection(Parameter.DB_URL, Parameter.DB_USER, Parameter.DB_PASS);
+        return DriverManager.getConnection(Parameter.instance().dbUrl(), Parameter.instance().dbUser(), Parameter.instance().dbPass());
     }
 
     public T getResult() {

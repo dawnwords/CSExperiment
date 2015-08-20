@@ -1,25 +1,23 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
 
-import cn.edu.fudan.se.crowdservice.algorithm.ServiceWorkers;
-
 import java.util.List;
 
 /**
  * Created by Dawnwords on 2015/8/6.
  */
 public class AlgorithmParameter {
-    private String compositeServiceXML;
+    private String bpelPath;
     private TimeCost timeCost;
     private List<ServiceWorkers> workers;
     private List<ServiceResultNum> resultNums;
 
-    public String compositeServiceXML() {
-        return compositeServiceXML;
+    public String bpelPath() {
+        return bpelPath;
     }
 
-    public AlgorithmParameter compositeServiceXML(String compositeServiceXML) {
-        this.compositeServiceXML = compositeServiceXML;
+    public AlgorithmParameter bpelPath(String compositeServiceXML) {
+        this.bpelPath = compositeServiceXML;
         return this;
     }
 
@@ -64,7 +62,7 @@ public class AlgorithmParameter {
     @Override
     public String toString() {
         String result = "AlgorithmParameter{" +
-                "\n compositeServiceXML:\n" + compositeServiceXML +
+                "\n bpelPath:\n" + bpelPath +
                 "\n timecost:" + timeCost +
                 "\n workers: [\n";
         for (ServiceWorkers worker : workers) {

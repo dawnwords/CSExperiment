@@ -24,4 +24,12 @@ public class ServiceResultNum {
         this.resultNum = resultNum;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "CSResultNum{" +
+                "key='" + service + '\'' +
+                ", value=" + resultNum +
+                '}';
+    }
 }

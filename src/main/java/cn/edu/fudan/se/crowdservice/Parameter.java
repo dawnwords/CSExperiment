@@ -1,13 +1,69 @@
 package cn.edu.fudan.se.crowdservice;
 
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * Created by Dawnwords on 2015/8/6.
  */
 public class Parameter {
-    private static final String DB_HOST = "10.131.252.156";
-    private static final int DB_PORT = 3306;
-    private static final String DB_NAME = "csexperiment";
-    public static final String DB_URL = String.format("jdbc:mysql://%s:%d/%s", DB_HOST, DB_PORT, DB_NAME);
-    public static final String DB_USER = "root";
-    public static final String DB_PASS = "cloudfdse";
+
+    private static Parameter instance = new Parameter();
+    private final Properties properties;
+
+    private Parameter() {
+        properties = new Properties();
+        try {
+            properties.load(this.getClass().getResourceAsStream("/settings.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Parameter instance() {
+        return instance;
+    }
+
+    public String dbUrl() {
+        String host = properties.getProperty("db_host");
+        int port = Integer.parseInt(properties.getProperty("db_port", "3306"));
+        String dbName = properties.getProperty("db_name");
+        return String.format("jdbc:mysql://%s:%d/%s", host, port, dbName);
+    }
+
+    public String dbUser() {
+        return properties.getProperty("db_user");
+    }
+
+    public String dbPass() {
+        return properties.getProperty("db_pass");
+    }
+
+    public String cs1Name() {
+        return properties.getProperty("cs1_name");
+    }
+
+    public String cs2Name() {
+        return properties.getProperty("cs2_name");
+    }
+
+    public String cs1Path() {
+        return properties.getProperty("cs1_path");
+    }
+
+    public String cs2Path() {
+        return properties.getProperty("cs2_path");
+    }
+
+    public String cs1cs2Path() {
+        return properties.getProperty("cs1_cs2_path");
+    }
+
+    public String thServicePath() {
+        return properties.getProperty("th_service_path");
+    }
+
+    public String parameterPath() {
+        return properties.getProperty("parameter_path");
+    }
 }

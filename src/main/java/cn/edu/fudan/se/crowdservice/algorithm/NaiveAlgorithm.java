@@ -1,9 +1,6 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
-import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
-import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
-import cn.edu.fudan.se.crowdservice.bean.ServiceResultNum;
-import cn.edu.fudan.se.crowdservice.bean.TimeCost;
+import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.util.Logger;
 
 import java.util.ArrayList;

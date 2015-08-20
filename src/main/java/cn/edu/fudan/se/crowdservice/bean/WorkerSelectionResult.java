@@ -1,12 +1,13 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Dawnwords on 2015/8/19.
  */
 public class WorkerSelectionResult {
-    List<CrowdWorker> workers;
+    List<CrowdWorker> workers = new ArrayList<>();
     private String service;
     private double totalCost;
     private long maxResponseTime;
@@ -15,8 +16,8 @@ public class WorkerSelectionResult {
         return workers;
     }
 
-    public WorkerSelectionResult workers(List<CrowdWorker> workers) {
-        this.workers = workers;
+    public WorkerSelectionResult addWorker(CrowdWorker worker) {
+        this.workers.add(worker);
         return this;
     }
 

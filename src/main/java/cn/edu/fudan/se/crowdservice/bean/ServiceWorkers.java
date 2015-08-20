@@ -1,6 +1,4 @@
-package cn.edu.fudan.se.crowdservice.algorithm;
-
-import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
+package cn.edu.fudan.se.crowdservice.bean;
 
 import java.util.List;
 
@@ -27,5 +25,18 @@ public class ServiceWorkers {
     public ServiceWorkers workers(List<CrowdWorker> workers) {
         this.workers = workers;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("key=");
+        sb.append(service);
+        sb.append('\n');
+        for (CrowdWorker worker : workers) {
+            sb.append(worker);
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 }

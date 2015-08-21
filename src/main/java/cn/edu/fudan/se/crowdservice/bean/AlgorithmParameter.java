@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class AlgorithmParameter {
     private int expId;
+    private String currentService;
     private String bpelPath;
     private TimeCost timeCost;
     private List<ServiceWorkers> workers;
@@ -19,6 +20,15 @@ public class AlgorithmParameter {
 
     public AlgorithmParameter expId(int expId) {
         this.expId = expId;
+        return this;
+    }
+
+    public String currentService() {
+        return currentService;
+    }
+
+    public AlgorithmParameter currentService(String currentService) {
+        this.currentService = currentService;
         return this;
     }
 

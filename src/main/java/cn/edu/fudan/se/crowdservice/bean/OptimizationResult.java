@@ -4,15 +4,15 @@ import cn.edu.fudan.se.crowdservice.util.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Dawnwords on 2015/8/19.
  */
 public class OptimizationResult {
     private double totalReliability;
-    private List<WorkerSelectionResult> selectionResult;
+    private Map<String, WorkerSelectionResult> selectionResult;
 
     public OptimizationResult build(BufferedReader input) {
         try {
@@ -22,7 +22,7 @@ public class OptimizationResult {
             }
 
             this.totalReliability = (Double) Parser.toDouble.parse(getValue(line, "Total Reliability={double}"));
-            this.selectionResult = new ArrayList<>();
+            this.selectionResult = new HashMap<>();
 
             boolean selectionResultStart = false;
             WorkerSelectionResult result = new WorkerSelectionResult();
@@ -33,7 +33,7 @@ public class OptimizationResult {
                 if (line.startsWith("=")) {
                     if (selectionResultStart) {
                         selectionResultStart = false;
-                        this.selectionResult.add(result);
+                        this.selectionResult.put(result.service(), result);
                         result = new WorkerSelectionResult();
                     } else {
                         selectionResultStart = true;
@@ -77,7 +77,7 @@ public class OptimizationResult {
         return totalReliability;
     }
 
-    public List<WorkerSelectionResult> selectionResult() {
+    public Map<String, WorkerSelectionResult> selectionResult() {
         return selectionResult;
     }
 }

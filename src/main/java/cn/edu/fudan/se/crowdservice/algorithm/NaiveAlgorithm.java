@@ -1,12 +1,15 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
-import cn.edu.fudan.se.crowdservice.bean.*;
-import cn.edu.fudan.se.crowdservice.util.Logger;
+import cn.edu.fudan.se.crowdservice.Parameter;
+import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
+import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
+import cn.edu.fudan.se.crowdservice.bean.ServiceSetting;
+import cn.edu.fudan.se.crowdservice.bean.TimeCost;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.*;
 
 public abstract class NaiveAlgorithm implements Algorithm {
     private Comparator<CrowdWorker> comparator;
@@ -17,31 +20,35 @@ public abstract class NaiveAlgorithm implements Algorithm {
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        List<ServiceWorkers> serviceWorkers = rank(parameter);
-        TimeCost[] timeCosts = new TimeCost[serviceWorkers.size()];
+        Map<String, ServiceSetting> serviceWorkers = rank(parameter, "go");
 
         long timeTotal = 0;
         double costTotal = 0;
-        for (int i = 0; i < timeCosts.length; i++) {
-            timeCosts[i] = new TimeCost();
-            List<CrowdWorker> cw = serviceWorkers.get(i).workers();
-            int resultNum = parameter.resultNums().get(i).resultNum();
-            for (int j = 0; j < cw.size() && j < resultNum; j++) {
-                CrowdWorker crowdWorker = cw.get(j);
-                timeCosts[i].aggregate(crowdWorker.responseTime(), crowdWorker.cost());
+        TimeCost currentTimeCost = new TimeCost();
+        for (String service : serviceWorkers.keySet()) {
+            ServiceSetting setting = serviceWorkers.get(service);
+
+            long serviceTime = 0;
+            double serviceCost = 0;
+            for (int j = 0; j < setting.workerGroup().size() && j < setting.resultNum(); j++) {
+                CrowdWorker worker = setting.workerGroup().get(j);
+                serviceTime = Math.max(serviceTime, worker.responseTime());
+                serviceCost += worker.cost();
             }
-            Logger.info(parameter.resultNums().get(i).service() + " : " + timeCosts[i]);
-            timeTotal += timeCosts[i].time();
-            costTotal += timeCosts[i].cost();
+            if (service.equals(parameter.currentService())) {
+                currentTimeCost = new TimeCost().cost(serviceCost).time(serviceTime);
+            }
+            timeTotal += serviceTime;
+            costTotal += serviceCost;
         }
         return new TimeCost()
-                .time(timeTotal == 0 ? 0 : parameter.deadline() * timeCosts[0].time() / timeTotal)
-                .cost(costTotal == 0 ? 0 : parameter.cost() * timeCosts[0].cost() / costTotal);
+                .time(timeTotal == 0 ? 0 : parameter.deadline() * currentTimeCost.time() / timeTotal)
+                .cost(costTotal == 0 ? 0 : parameter.cost() * currentTimeCost.cost() / costTotal);
     }
 
     @Override
     public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
-        List<CrowdWorker> cw = rank(parameter).get(0).workers();
+        List<CrowdWorker> cw = rank(parameter, "ws").get(parameter.currentService()).workerGroup();
         double totalCost = parameter.cost();
         ArrayList<CrowdWorker> result = new ArrayList<>();
         for (CrowdWorker worker : cw) {
@@ -53,24 +60,40 @@ public abstract class NaiveAlgorithm implements Algorithm {
         return result;
     }
 
-    public List<ServiceWorkers> rank(AlgorithmParameter parameter) {
-        List<ServiceResultNum> serviceResultNums = parameter.resultNums();
-        List<ServiceWorkers> csw = parameter.workers();
-        List<ServiceWorkers> result = new ArrayList<>();
+    private Map<String, ServiceSetting> rank(AlgorithmParameter parameter, String invoker) {
+        String inputPath = String.format("%sEXP-%d-%s-%s-input", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService(), invoker);
 
-        for (int i = 0; i < serviceResultNums.size(); i++) {
-            ServiceWorkers serviceWorkers = csw.get(i);
-            List<CrowdWorker> cw = serviceWorkers.workers();
+        try {
+            PrintWriter input = new PrintWriter(new OutputStreamWriter(new FileOutputStream(inputPath, false)));
+            input.printf("time=%d,cost=%f\n", parameter.deadline(), parameter.cost());
+            input.println("===");
+            for (String service : parameter.serviceSettings().keySet()) {
+                input.println("key=" + service);
+                for (CrowdWorker worker : parameter.serviceSettings().get(service).workerGroup()) {
+                    input.println(worker);
+                }
+            }
+            input.println("===");
+            for (String service : parameter.serviceSettings().keySet()) {
+                input.printf("CSResultNum{key='%s', value=%d}\n", service, parameter.serviceSettings().get(service).resultNum());
+            }
+            input.flush();
+            input.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+        Map<String, ServiceSetting> result = new HashMap<>();
+        for (String service : parameter.serviceSettings().keySet()) {
             List<CrowdWorker> newcw = new ArrayList<>();
-            for (CrowdWorker w : cw) {
+            ServiceSetting setting = parameter.serviceSettings().get(service);
+            for (CrowdWorker w : setting.workerGroup()) {
                 if (w.responseTime() < parameter.deadline()) {
                     newcw.add(w);
                 }
             }
-
             Collections.sort(newcw, comparator);
-            result.add(new ServiceWorkers().service(serviceWorkers.service()).workers(newcw));
+            result.put(service, new ServiceSetting().resultNum(setting.resultNum()).workerGroup(newcw));
         }
         return result;
     }

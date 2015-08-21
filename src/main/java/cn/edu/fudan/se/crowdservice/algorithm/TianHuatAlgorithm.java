@@ -42,18 +42,23 @@ public class TianHuatAlgorithm implements Algorithm {
 
     private OptimizationResult globalOptimize(AlgorithmParameter parameter, int iterationNum, String invoker) {
         try {
+            Map<String, ServiceSetting> serviceSettings = parameter.serviceSettings();
+
             String inputPath = String.format("%sEXP-%d-%s-%s-input", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService(), invoker);
             String outputPath = String.format("%sEXP-%d-%s-%s-output", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService(), invoker);
 
             PrintWriter input = new PrintWriter(new OutputStreamWriter(new FileOutputStream(inputPath, false)));
             input.printf("time=%d,cost=%f,numOfGeneration=%d\n", parameter.deadline(), parameter.cost(), iterationNum);
             input.println("===");
-            for (ServiceWorkers sw : parameter.workers()) {
-                input.println(sw);
+            for (String service : serviceSettings.keySet()) {
+                input.println("key=" + service);
+                for (CrowdWorker worker : serviceSettings.get(service).workerGroup()) {
+                    input.println(worker);
+                }
             }
             input.println("===");
-            for (ServiceResultNum sr : parameter.resultNums()) {
-                input.println(sr);
+            for (String service : serviceSettings.keySet()) {
+                input.printf("CSResultNum{key='%s', value=%d}\n", service, serviceSettings.get(service).resultNum());
             }
             input.flush();
             input.close();
@@ -67,7 +72,7 @@ public class TianHuatAlgorithm implements Algorithm {
                 @Override
                 public int read() throws IOException {
                     int read = in.read();
-                    output.write(read);
+                    if (read >= 0) output.write(read);
                     return read;
                 }
 

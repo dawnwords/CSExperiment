@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Dawnwords on 2015/8/6.
  */
 public class Main {
-    public static final Algorithm ALGORITHM = new cn.edu.fudan.se.crowdservice.algorithm.TianHuatAlgorithm();
+    public static final Algorithm ALGORITHM = new cn.edu.fudan.se.crowdservice.algorithm.OnlyReputationNavieAlgorithm();
     public static final boolean CLEAR_EXP = true;
     public static final boolean CLEAR_WORKER = false;
     public static final Random RANDOM = new Random(807090336);

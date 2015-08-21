@@ -8,8 +8,6 @@ import cn.edu.fudan.se.crowdservice.dao.UpdateTimeCostResultNumDAO;
 import cn.edu.fudan.se.crowdservice.util.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,26 +30,18 @@ public class Experiment {
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs1Name())
                 .bpelPath(Parameter.instance().cs1cs2Path())
-                .workers(Arrays.asList(
-                        new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group()),
-                        new ServiceWorkers().service(Parameter.instance().cs2Name()).workers(workerGroups.cs2Group())
-                ))
-                .resultNums(Arrays.asList(
-                        new ServiceResultNum().service(Parameter.instance().cs1Name()).resultNum(input.cs1ResultNum()),
-                        new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())
-                ));
+                .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()))
+                .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
         AlgorithmParameter cs1WS = new AlgorithmParameter()
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs1Name())
                 .bpelPath(Parameter.instance().cs1Path())
-                .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group())))
-                .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs1Name()).resultNum(input.cs1ResultNum())));
+                .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()));
         AlgorithmParameter cs2GP = new AlgorithmParameter()
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs2Name())
                 .bpelPath(Parameter.instance().cs2Path())
-                .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs2Name()).workers(workerGroups.cs2Group())))
-                .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())));
+                .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
 
         try {
             executeCS("CS1", cs1GP, cs1WS);

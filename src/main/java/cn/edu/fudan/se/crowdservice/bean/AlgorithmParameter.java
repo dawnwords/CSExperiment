@@ -1,7 +1,8 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -11,8 +12,7 @@ public class AlgorithmParameter {
     private String currentService;
     private String bpelPath;
     private TimeCost timeCost;
-    private List<ServiceWorkers> workers;
-    private List<ServiceResultNum> resultNums;
+    private Map<String, ServiceSetting> serviceSettings = new HashMap<>();
 
     public int expId() {
         return expId;
@@ -54,44 +54,12 @@ public class AlgorithmParameter {
         return this;
     }
 
-    public List<ServiceWorkers> workers() {
-        if (workers == null) {
-            throw new NullPointerException("workers is null");
-        }
-        return workers;
+    public Map<String, ServiceSetting> serviceSettings() {
+        return serviceSettings;
     }
 
-
-    public AlgorithmParameter workers(List<ServiceWorkers> workers) {
-        this.workers = workers;
+    public AlgorithmParameter addServiceSetting(String service, ServiceSetting serviceSetting) {
+        this.serviceSettings.put(service, serviceSetting);
         return this;
-    }
-
-    public List<ServiceResultNum> resultNums() {
-        if (resultNums == null) {
-            throw new NullPointerException("resultNums is null");
-        }
-        return resultNums;
-    }
-
-    public AlgorithmParameter resultNums(List<ServiceResultNum> resultNums) {
-        this.resultNums = resultNums;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        String result = "AlgorithmParameter{" +
-                "\n bpelPath:\n" + bpelPath +
-                "\n timecost:" + timeCost +
-                "\n workers: [\n";
-        for (ServiceWorkers worker : workers) {
-            result += worker.toString() + "\n";
-        }
-        result += " ]\n resultnums:[\n";
-        for (ServiceResultNum resultNum : resultNums) {
-            result += resultNum.toString() + "\n";
-        }
-        return result + " ]\n}";
     }
 }

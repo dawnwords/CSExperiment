@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class GenerateWorkerGroupDAO extends DAO<CrowdWorkerGroups> {
 
-    private int cs1GroupNum, cs2GroupNum;
+    private int cs1GroupNum, cs2GroupNum, cs3GroupNum;
     private Random random;
 
     public GenerateWorkerGroupDAO cs1GroupNum(int cs1GroupNum) {
@@ -23,6 +23,11 @@ public class GenerateWorkerGroupDAO extends DAO<CrowdWorkerGroups> {
 
     public GenerateWorkerGroupDAO cs2GroupNum(int cs2GroupNum) {
         this.cs2GroupNum = cs2GroupNum;
+        return this;
+    }
+
+    public GenerateWorkerGroupDAO cs3GroupNum(int cs3GroupNum) {
+        this.cs3GroupNum = cs3GroupNum;
         return this;
     }
 
@@ -37,7 +42,7 @@ public class GenerateWorkerGroupDAO extends DAO<CrowdWorkerGroups> {
     }
 
     private CrowdWorkerGroups randomSelect(List<CrowdWorker> all) {
-        int selectedNumber = cs1GroupNum + cs2GroupNum;
+        int selectedNumber = cs1GroupNum + cs2GroupNum + cs3GroupNum;
         int r, i;
         for (i = selectedNumber; i < all.size(); i++) {
             r = (int) (random.nextDouble() * (i + 1));
@@ -50,8 +55,11 @@ public class GenerateWorkerGroupDAO extends DAO<CrowdWorkerGroups> {
         for (i = 0; i < cs1GroupNum; i++) {
             result.addCS1Worker(all.get(i));
         }
-        for (; i < selectedNumber; i++) {
+        for (; i < cs2GroupNum + cs1GroupNum; i++) {
             result.addCS2Worker(all.get(i));
+        }
+        for (; i < selectedNumber; i++) {
+            result.addCS3Worker(all.get(i));
         }
         return result;
     }

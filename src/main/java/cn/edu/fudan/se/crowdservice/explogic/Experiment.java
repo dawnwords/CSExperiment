@@ -25,27 +25,49 @@ public class Experiment {
         CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
                 .cs1GroupNum(input.cs1GroupNum())
                 .cs2GroupNum(input.cs2GroupNum())
+                .cs3GroupNum(input.cs3GroupNum())
                 .random(input.random()).getResult();
-        AlgorithmParameter cs1GP = new AlgorithmParameter()
+        AlgorithmParameter cs1GO = new AlgorithmParameter()
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs1Name())
-                .bpelPath(Parameter.instance().cs1cs2Path())
+                .bpelPath(Parameter.instance().bpelPath() + "cs1_go.bpel")
                 .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()))
-                .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
+                .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
+                .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
         AlgorithmParameter cs1WS = new AlgorithmParameter()
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs1Name())
-                .bpelPath(Parameter.instance().cs1Path())
+                .bpelPath(Parameter.instance().bpelPath() + "cs1_ws.bpel")
                 .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()));
-        AlgorithmParameter cs2GP = new AlgorithmParameter()
+
+        AlgorithmParameter cs2GO = new AlgorithmParameter()
                 .expId(input.expId())
                 .currentService(Parameter.instance().cs2Name())
-                .bpelPath(Parameter.instance().cs2Path())
+                .bpelPath(Parameter.instance().bpelPath() + "cs2_go.bpel")
+                .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
+                .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+        AlgorithmParameter cs2WS = new AlgorithmParameter()
+                .expId(input.expId())
+                .currentService(Parameter.instance().cs2Name())
+                .bpelPath(Parameter.instance().bpelPath() + "cs2_ws.bpel")
                 .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
 
+        AlgorithmParameter cs3GO = new AlgorithmParameter()
+                .expId(input.expId())
+                .currentService(Parameter.instance().cs3Name())
+                .bpelPath(Parameter.instance().bpelPath() + "cs3_go.bpel")
+                .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+        AlgorithmParameter cs3WS = new AlgorithmParameter()
+                .expId(input.expId())
+                .currentService(Parameter.instance().cs3Name())
+                .bpelPath(Parameter.instance().bpelPath() + "cs3_ws.bpel")
+                .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+
+
         try {
-            executeCS("CS1", cs1GP, cs1WS);
-            executeCS("CS2", cs2GP, cs2GP);
+            executeCS("CS1", cs1GO, cs1WS);
+            executeCS("CS2", cs2GO, cs2WS);
+            executeCS("CS3", cs3GO, cs3WS);
         } catch (Exception e) {
             Logger.info(e.getMessage());
         }

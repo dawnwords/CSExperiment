@@ -71,7 +71,7 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
                     "  `expid` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `workerid` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs` ENUM('CS2','CS1') DEFAULT NULL,\n" +
+                    "  `cs` ENUM('CS3','CS2','CS1') DEFAULT NULL,\n" +
                     "  `selected` BIT(1) DEFAULT NULL,\n" +
                     "  `success` BIT(1) DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`),\n" +

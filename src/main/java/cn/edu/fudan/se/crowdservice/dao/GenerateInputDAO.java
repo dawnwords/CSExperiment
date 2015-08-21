@@ -27,7 +27,7 @@ public class GenerateInputDAO extends DAO<Boolean> {
 
     @Override
     protected Boolean processData(Connection connection) throws Exception {
-        String sql = "INSERT INTO expinput(cost, deadline, cs1resultNum, cs2resultNum) VALUES(?,?,?,?);";
+        String sql = "INSERT INTO expinput(cost, deadline, cs1resultNum, cs2resultNum,cs3resultNum) VALUES(?,?,?,?,?);";
         PreparedStatement ps = connection.prepareStatement(sql);
         CostGen cost = new CostGen();
         DeadlineGen deadline = new DeadlineGen();
@@ -39,6 +39,7 @@ public class GenerateInputDAO extends DAO<Boolean> {
             ps.setLong(2, deadline.generate(random));
             ps.setInt(3, resultNum.generate(random));
             ps.setInt(4, resultNum.generate(random));
+            ps.setInt(5, resultNum.generate(random));
             if (ps.executeUpdate() == 1) {
                 count++;
             }

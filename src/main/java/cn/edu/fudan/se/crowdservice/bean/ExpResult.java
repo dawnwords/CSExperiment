@@ -9,17 +9,9 @@ public class ExpResult {
     private int cs2success;
     private int success;
 
-    public int total() {
-        return total;
-    }
-
     public ExpResult total(int total) {
         this.total = total;
         return this;
-    }
-
-    public int cs1success() {
-        return cs1success;
     }
 
     public ExpResult cs1success(int cs1success) {
@@ -27,17 +19,9 @@ public class ExpResult {
         return this;
     }
 
-    public int cs2success() {
-        return cs2success;
-    }
-
     public ExpResult cs2success(int cs2success) {
         this.cs2success = cs2success;
         return this;
-    }
-
-    public int success() {
-        return success;
     }
 
     public ExpResult success(int success) {

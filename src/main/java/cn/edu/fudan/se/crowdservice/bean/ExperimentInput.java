@@ -10,8 +10,8 @@ import cn.edu.fudan.se.crowdservice.datagen.Random;
 public class ExperimentInput {
     private Algorithm algorithm;
     private int expId;
-    private int cs1ResultNum, cs2ResultNum;
-    private int cs1GroupNum, cs2GroupNum;
+    private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
+    private int cs1GroupNum, cs2GroupNum, cs3GroupNum;
     private Random random, reliability;
     private TimeCost timeCost;
 
@@ -66,6 +66,24 @@ public class ExperimentInput {
 
     public ExperimentInput cs2ResultNum(int cs2Number) {
         this.cs2ResultNum = cs2Number;
+        return this;
+    }
+
+    public int cs3ResultNum() {
+        return cs3ResultNum;
+    }
+
+    public ExperimentInput cs3ResultNum(int cs3ResultNum) {
+        this.cs3ResultNum = cs3ResultNum;
+        return this;
+    }
+
+    public int cs3GroupNum() {
+        return cs3GroupNum;
+    }
+
+    public ExperimentInput cs3GroupNum(int cs3GroupNum) {
+        this.cs3GroupNum = cs3GroupNum;
         return this;
     }
 

@@ -47,16 +47,12 @@ public class Parameter {
         return properties.getProperty("cs2_name");
     }
 
-    public String cs1Path() {
-        return properties.getProperty("cs1_path");
+    public String cs3Name() {
+        return properties.getProperty("cs3_name");
     }
 
-    public String cs2Path() {
-        return properties.getProperty("cs2_path");
-    }
-
-    public String cs1cs2Path() {
-        return properties.getProperty("cs1_cs2_path");
+    public String bpelPath(){
+        return properties.getProperty("bpel_path");
     }
 
     public String thServicePath() {

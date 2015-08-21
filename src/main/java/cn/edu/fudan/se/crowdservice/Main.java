@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Dawnwords on 2015/8/6.
  */
 public class Main {
-    public static final Algorithm ALGORITHM = new cn.edu.fudan.se.crowdservice.algorithm.OnlyReputationNavieAlgorithm();
+    public static final Algorithm ALGORITHM = new cn.edu.fudan.se.crowdservice.algorithm.TianHuatAlgorithm();
     public static final boolean CLEAR_EXP = true;
     public static final boolean CLEAR_WORKER = false;
     public static final Random RANDOM = new Random(807090336);
@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         resetDB();
         generateWorker(2000);
-        for (ExperimentInput input : generateExperimentInput(10, 40, 60)) {
+        for (ExperimentInput input : generateExperimentInput(10, 40, 60, 50)) {
             try {
                 new Experiment(input.random(RANDOM).reliability(RELIABILITY_RANDOM).algorithm(ALGORITHM)).preform();
             } catch (Exception e) {
@@ -48,10 +48,10 @@ public class Main {
         reset.getResult();
     }
 
-    private static List<ExperimentInput> generateExperimentInput(int experimentInputNumber, int cs1GroupNumber, int cs2GroupNumber) {
+    private static List<ExperimentInput> generateExperimentInput(int experimentInputNumber, int cs1GroupNumber, int cs2GroupNumber, int cs3GroupNumber) {
         if (CLEAR_EXP) new GenerateInputDAO().random(RANDOM).experimentTimes(experimentInputNumber).getResult();
         Logger.info("Generate Experiment Input Finish: %d", experimentInputNumber);
-        return new SelectExperimentInputDAO().cs1GroupNum(cs1GroupNumber).cs2GroupNum(cs2GroupNumber).getResult();
+        return new SelectExperimentInputDAO().cs1GroupNum(cs1GroupNumber).cs2GroupNum(cs2GroupNumber).cs3GroupNum(cs3GroupNumber).getResult();
     }
 
     private static void generateWorker(int workerNumber) {

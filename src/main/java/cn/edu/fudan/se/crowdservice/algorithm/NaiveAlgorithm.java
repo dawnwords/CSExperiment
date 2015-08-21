@@ -42,7 +42,6 @@ public abstract class NaiveAlgorithm implements Algorithm {
             print.add(result);
             timeTotal += serviceTime;
             costTotal += serviceCost;
-
         }
         printResult(print, outputPath);
         return new TimeCost()
@@ -65,6 +64,9 @@ public abstract class NaiveAlgorithm implements Algorithm {
         }
         printResult(Collections.singletonList(print),
                 String.format("%sEXP-%d-%s-ws-output", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService()));
+        if (result.size() == 0) {
+            throw new RuntimeException("Worker Selection Fail");
+        }
         return result;
     }
 

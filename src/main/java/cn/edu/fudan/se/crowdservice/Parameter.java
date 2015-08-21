@@ -63,7 +63,8 @@ public class Parameter {
         return properties.getProperty("th_service_path");
     }
 
-    public String parameterPath() {
-        return properties.getProperty("parameter_path");
+    public String ioPath(int expId) {
+        return properties.getProperty("io_path");
     }
+
 }

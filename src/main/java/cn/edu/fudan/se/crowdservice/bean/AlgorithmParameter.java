@@ -7,10 +7,20 @@ import java.util.List;
  * Created by Dawnwords on 2015/8/6.
  */
 public class AlgorithmParameter {
+    private int expId;
     private String bpelPath;
     private TimeCost timeCost;
     private List<ServiceWorkers> workers;
     private List<ServiceResultNum> resultNums;
+
+    public int expId() {
+        return expId;
+    }
+
+    public AlgorithmParameter expId(int expId) {
+        this.expId = expId;
+        return this;
+    }
 
     public String bpelPath() {
         return bpelPath;

@@ -29,6 +29,7 @@ public class Experiment {
                 .cs2GroupNum(input.cs2GroupNum())
                 .random(input.random()).getResult();
         AlgorithmParameter cs1GP = new AlgorithmParameter()
+                .expId(input.expId())
                 .bpelPath(Parameter.instance().cs1cs2Path())
                 .workers(Arrays.asList(
                         new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group()),
@@ -39,10 +40,12 @@ public class Experiment {
                         new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())
                 ));
         AlgorithmParameter cs1WS = new AlgorithmParameter()
+                .expId(input.expId())
                 .bpelPath(Parameter.instance().cs1Path())
                 .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs1Name()).workers(workerGroups.cs1Group())))
                 .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs1Name()).resultNum(input.cs1ResultNum())));
         AlgorithmParameter cs2GP = new AlgorithmParameter()
+                .expId(input.expId())
                 .bpelPath(Parameter.instance().cs2Path())
                 .workers(Collections.singletonList(new ServiceWorkers().service(Parameter.instance().cs2Name()).workers(workerGroups.cs2Group())))
                 .resultNums(Collections.singletonList(new ServiceResultNum().service(Parameter.instance().cs2Name()).resultNum(input.cs2ResultNum())));
@@ -58,17 +61,12 @@ public class Experiment {
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
         Logger.info("Executing %s", cs);
         globalPlanningPara.timeCost(input.timeCost());
-        Logger.info("Global Optimization Input:" + globalPlanningPara);
         TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara);
-        Logger.info("Finish Global Optimize:" + planTC);
+        Logger.info("Global Optimize Result:" + planTC);
 
         workerSelectionPara.timeCost(planTC);
-        Logger.info("Worker Selection Input:" + workerSelectionPara);
         List<CrowdWorker> selectedWorkers = input.algorithm().workerSelection(workerSelectionPara);
         Logger.info("Finish Worker Selection:");
-        for (CrowdWorker worker : selectedWorkers) {
-            Logger.info("%s", worker);
-        }
 
         List<ExpStatus> expStatus = new ArrayList<>();
         TimeCost realTC = new TimeCost();

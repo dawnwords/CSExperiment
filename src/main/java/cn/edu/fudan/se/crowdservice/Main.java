@@ -13,7 +13,6 @@ import java.util.List;
  * Created by Dawnwords on 2015/8/6.
  */
 public class Main {
-    public static final Algorithm ALGORITHM = new cn.edu.fudan.se.crowdservice.algorithm.TianHuatAlgorithm();
     public static final boolean CLEAR_EXP = true;
     public static final boolean CLEAR_WORKER = false;
     public static final Random RANDOM = new Random(807090336);
@@ -26,9 +25,11 @@ public class Main {
     public static void main(String[] args) {
         resetDB();
         generateWorker(2000);
+        Algorithm algorithm = Parameter.instance().algorithm();
+        Logger.info("Algorithm:" + algorithm.getClass().getSimpleName());
         for (ExperimentInput input : generateExperimentInput(10, 40, 60, 50)) {
             try {
-                new Experiment(input.random(RANDOM).reliability(RELIABILITY_RANDOM).algorithm(ALGORITHM)).preform();
+                new Experiment(input.random(RANDOM).reliability(RELIABILITY_RANDOM).algorithm(algorithm)).preform();
             } catch (Exception e) {
                 Logger.info("Error: %s", e.getMessage());
             }

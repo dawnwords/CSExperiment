@@ -14,8 +14,8 @@ public class SelectExpResultDAO extends DAO<ExpResult> {
     protected ExpResult processData(Connection connection) throws Exception {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("SELECT  * FROM (SELECT count(id) AS total FROM expinput) AS Total " +
-                "JOIN (SELECT count(id) AS cs1success FROM expinput WHERE cs1success = 1 AND cs2success = 0 AND cs3success = 0) AS CS1 " +
-                "JOIN (SELECT count(id) AS cs1success FROM expinput WHERE cs1success = 1 AND cs2success = 1 AND cs3success = 0) AS CS2 " +
+                "JOIN (SELECT count(id) AS cs1success FROM expinput WHERE cs1success = 1 AND cs2success <> 1 AND cs3success <> 1) AS CS1 " +
+                "JOIN (SELECT count(id) AS cs1success FROM expinput WHERE cs1success = 1 AND cs2success = 1 AND cs3success <> 1) AS CS2 " +
                 "JOIN (SELECT count(id) AS cs1success FROM expinput WHERE cs1success = 1 AND cs2success = 1 AND cs3success = 1) AS SUCCESS");
 
         if (rs.next()) {

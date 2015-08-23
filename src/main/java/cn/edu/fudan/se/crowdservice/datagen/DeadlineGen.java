@@ -6,6 +6,6 @@ package cn.edu.fudan.se.crowdservice.datagen;
 public class DeadlineGen implements DataGenerator<Long> {
     @Override
     public Long generate(Random random) {
-        return (long) (500 + 200 * Gaussian2Sigma.get(random));
+        return (long) (1100 + 200 * Gaussian2Sigma.get(random));
     }
 }

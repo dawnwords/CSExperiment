@@ -7,6 +7,6 @@ package cn.edu.fudan.se.crowdservice.datagen;
 public class CostGen implements DataGenerator<Double> {
     @Override
     public Double generate(Random random) {
-        return 120 + Gaussian2Sigma.get(random) * 10;
+        return 100 + Gaussian2Sigma.get(random) * 10;
     }
 }

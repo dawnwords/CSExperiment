@@ -6,6 +6,6 @@ package cn.edu.fudan.se.crowdservice.datagen;
 public class ResultNumGen implements DataGenerator<Integer> {
     @Override
     public Integer generate(Random random) {
-        return (int) (5 + 2 * Gaussian2Sigma.get(random));
+        return (int) (3 + 1 * Gaussian2Sigma.get(random));
     }
 }

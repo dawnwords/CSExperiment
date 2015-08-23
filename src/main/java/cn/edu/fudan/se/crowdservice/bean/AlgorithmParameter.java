@@ -62,4 +62,8 @@ public class AlgorithmParameter {
         this.serviceSettings.put(service, serviceSetting);
         return this;
     }
+
+    public int currentResultNum() {
+        return serviceSettings.get(currentService).resultNum();
+    }
 }

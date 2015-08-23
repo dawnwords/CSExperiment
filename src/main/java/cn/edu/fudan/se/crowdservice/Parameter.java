@@ -1,5 +1,8 @@
 package cn.edu.fudan.se.crowdservice;
 
+import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -15,6 +18,10 @@ public class Parameter {
         properties = new Properties();
         try {
             properties.load(this.getClass().getResourceAsStream("/settings.properties"));
+            File ioDir = new File(ioPath());
+            if (!ioDir.exists() || !ioDir.isDirectory()) {
+                ioDir.mkdirs();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +58,7 @@ public class Parameter {
         return properties.getProperty("cs3_name");
     }
 
-    public String bpelPath(){
+    public String bpelPath() {
         return properties.getProperty("bpel_path");
     }
 
@@ -63,4 +70,11 @@ public class Parameter {
         return properties.getProperty("io_path");
     }
 
+    public Algorithm algorithm() {
+        try {
+            return (Algorithm) Algorithm.AlgorithmClass.valueOf(properties.getProperty("algorithm")).cls().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -93,22 +93,14 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  CONSTRAINT `FK_worker` FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
+        statement.addBatch("DROP VIEW IF EXISTS `csresult`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `csresult` AS SELECT `cs1result`.`id` AS `expid`,`cs1result`.`expno` AS `expno`,((`cs1result`.`success` >= `cs1result`.`cs1resultNum`) AND (`cs2result`.`success` >= `cs1result`.`cs2resultNum`) AND (`cs3result`.`success` >= `cs1result`.`cs3resultNum`)) AS `success` FROM ((`expresult` `cs1result` JOIN `expresult` `cs2result` ON(((`cs1result`.`id` = `cs2result`.`id`) AND (`cs2result`.`cs` = 'cs2') AND (`cs1result`.`expno` = `cs2result`.`expno`)))) JOIN `expresult` `cs3result` ON(((`cs1result`.`id` = `cs3result`.`id`) AND (`cs3result`.`cs` = 'cs3') AND (`cs1result`.`expno` = `cs3result`.`expno`)))) WHERE (`cs1result`.`cs` = 'cs1')");
+        statement.addBatch("DROP VIEW IF EXISTS `diagram`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `diagram` AS SELECT DISTINCT `expinput`.`id` AS `id`,`expinput`.`exptimes` AS `exptimes`,`expinput`.`cost` AS `cost`,`expinput`.`deadline` AS `deadline`,`expinput`.`cs1resultNum` AS `cs1resultNum`,`expinput`.`cs2resultNum` AS `cs2resultNum`,`expinput`.`cs3resultNum` AS `cs3resultNum`,`successrate`.`successrate` AS `successrate`,`expstatus`.`algorithm` AS `algorithm` FROM ((`expinput` JOIN `successrate` ON((`expinput`.`id` = `successrate`.`expid`))) JOIN `expstatus` ON((`expstatus`.`expid` = `expinput`.`id`)))");
         statement.addBatch("DROP VIEW IF EXISTS `expresult`");
-        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `expresult` AS " +
-                "SELECT `expinput`.`id` AS `id`," +
-                "`expinput`.`exptimes` AS `exptimes`," +
-                "`expinput`.`cost` AS `cost`," +
-                "`expinput`.`deadline` AS `deadline`," +
-                "`expinput`.`cs1resultNum` AS `cs1resultNum`," +
-                "`expinput`.`cs2resultNum` AS `cs2resultNum`," +
-                "`expinput`.`cs3resultNum` AS `cs3resultNum`," +
-                "`workersuccess`.`expno` AS `expno`," +
-                "sum(`workersuccess`.`success`) AS `success`," +
-                "`expstatus`.`cs` AS `cs` " +
-                "FROM (((`expinput` JOIN `expstatus` ON((`expstatus`.`expid` = `expinput`.`id`))) " +
-                "JOIN `worker` ON((`expstatus`.`workerid` = `worker`.`id`))) " +
-                "JOIN `workersuccess` ON((`workersuccess`.`workerid` = `worker`.`id`))) " +
-                "GROUP BY `workersuccess`.`expno`,`expstatus`.`cs`,`expinput`.`id`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `expresult` AS SELECT `expinput`.`id` AS `id`,`expinput`.`exptimes` AS `exptimes`,`expinput`.`cost` AS `cost`,`expinput`.`deadline` AS `deadline`,`expinput`.`cs1resultNum` AS `cs1resultNum`,`expinput`.`cs2resultNum` AS `cs2resultNum`,`expinput`.`cs3resultNum` AS `cs3resultNum`,`workersuccess`.`expno` AS `expno`,sum(`workersuccess`.`success`) AS `success`,`expstatus`.`cs` AS `cs` FROM (((`expinput` JOIN `expstatus` ON((`expstatus`.`expid` = `expinput`.`id`))) JOIN `worker` ON((`expstatus`.`workerid` = `worker`.`id`))) JOIN `workersuccess` ON((`workersuccess`.`workerid` = `worker`.`id`))) GROUP BY `workersuccess`.`expno`,`expstatus`.`cs`,`expinput`.`id`");
+        statement.addBatch("DROP VIEW IF EXISTS `successrate`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `successrate` AS SELECT `csresult`.`expid` AS `expid`,(sum(`csresult`.`success`) / count(`csresult`.`success`)) AS `successrate` FROM `csresult` GROUP BY `csresult`.`expid` ORDER BY `csresult`.`expid`");
         return statement.executeBatch().length > 0;
     }
 }

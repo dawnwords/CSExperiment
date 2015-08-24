@@ -64,7 +64,7 @@ public class Main {
         int cs2GroupSize = Integer.parseInt(groupSizes[1]);
         int cs3GroupSize = Integer.parseInt(groupSizes[2]);
 
-        for (String token : Parameter.instance().resultNums().split("|")) {
+        for (String token : Parameter.instance().resultNums().split("\\|")) {
             String[] resultNums = token.split(",");
             result.add(new ExperimentInput()
                     .cs1GroupNum(cs1GroupSize)

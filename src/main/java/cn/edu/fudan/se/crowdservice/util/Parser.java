@@ -1,7 +1,5 @@
 package cn.edu.fudan.se.crowdservice.util;
 
-import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
-
 /**
  * Created by Dawnwords on 2015/8/20.
  */

@@ -87,8 +87,10 @@ public class ExperimentInput {
                 "expId=" + expId +
                 ", cs1ResultNum=" + cs1ResultNum +
                 ", cs2ResultNum=" + cs2ResultNum +
+                ", cs3ResultNum=" + cs3ResultNum +
                 ", cs1GroupNum=" + cs1GroupNum +
                 ", cs2GroupNum=" + cs2GroupNum +
+                ", cs3GroupNum=" + cs3GroupNum +
                 ", timeCost=" + timeCost +
                 '}';
     }

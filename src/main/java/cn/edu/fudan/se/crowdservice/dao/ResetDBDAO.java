@@ -39,6 +39,7 @@ public class ResetDBDAO extends DAO<Boolean> {
             statement.addBatch("DROP TABLE IF EXISTS `expinput`");
             statement.addBatch("CREATE TABLE `expinput` (\n" +
                     "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
+                    "  `exptimes` int(10) unsigned DEFAULT NULL,\n" +
                     "  `cost` double(20,2) unsigned DEFAULT NULL,\n" +
                     "  `deadline` int(20) unsigned DEFAULT NULL,\n" +
                     "  `cs1resultNum` int(10) DEFAULT NULL,\n" +
@@ -57,7 +58,7 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `cs3realtime` int(20) unsigned DEFAULT NULL,\n" +
                     "  `cs3realcost` double(20,2) unsigned DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8");
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
         if (!ignoreExpstatus) {
             statement.addBatch("DROP TABLE IF EXISTS `expstatus`");
@@ -66,7 +67,7 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `expid` int(10) unsigned DEFAULT NULL,\n" +
                     "  `workerid` int(10) unsigned DEFAULT NULL,\n" +
                     "  `cs` enum('cs3','cs2','cs1') DEFAULT NULL,\n" +
-                    "  `algorithm` enum('') DEFAULT NULL,\n" +
+                    "  `algorithm` enum('cs','rp','rt','th') DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`),\n" +
                     "  KEY `FK_expid` (`expid`),\n" +
                     "  KEY `FK_workerid` (`workerid`),\n" +
@@ -82,7 +83,7 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `reliability` double(20,18) unsigned DEFAULT NULL,\n" +
                     "  `responseTime` int(10) unsigned DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8");
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
             statement.addBatch("DROP TABLE IF EXISTS `workersuccess`");
             statement.addBatch("CREATE TABLE `workersuccess` (\n" +
                     "  `workerid` INT(10) UNSIGNED DEFAULT NULL,\n" +

@@ -39,8 +39,8 @@ public class UpdateTimeCostResultNumDAO extends DAO<Boolean> {
                 cs + "deadline=?, " +
                 cs + "cost=?, " +
                 cs + "realtime=?, " +
-                cs + "realcost=?, " +
-                " WHERE id = ?";
+                cs + "realcost=? " +
+                "WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         int i = 0;
         ps.setLong(++i, planTC.time());

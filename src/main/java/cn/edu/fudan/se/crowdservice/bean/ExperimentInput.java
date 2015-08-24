@@ -1,18 +1,12 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
-import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
-import cn.edu.fudan.se.crowdservice.datagen.Random;
-
-
 /**
  * Created by Dawnwords on 2015/8/6.
  */
 public class ExperimentInput {
-    private Algorithm algorithm;
     private int expId;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
     private int cs1GroupNum, cs2GroupNum, cs3GroupNum;
-    private Random random, reliability;
     private TimeCost timeCost;
 
     public int expId() {
@@ -21,15 +15,6 @@ public class ExperimentInput {
 
     public ExperimentInput expId(int expId) {
         this.expId = expId;
-        return this;
-    }
-
-    public Algorithm algorithm() {
-        return algorithm;
-    }
-
-    public ExperimentInput algorithm(Algorithm algorithm) {
-        this.algorithm = algorithm;
         return this;
     }
 
@@ -87,24 +72,6 @@ public class ExperimentInput {
         return this;
     }
 
-    public Random random() {
-        return random;
-    }
-
-    public ExperimentInput random(Random random) {
-        this.random = random;
-        return this;
-    }
-
-    public double reliability() {
-        return reliability.nextDouble();
-    }
-
-    public ExperimentInput reliability(Random reliability) {
-        this.reliability = reliability;
-        return this;
-    }
-
     public TimeCost timeCost() {
         return timeCost;
     }
@@ -117,8 +84,7 @@ public class ExperimentInput {
     @Override
     public String toString() {
         return "ExperimentInput{" +
-                "algorithm=" + algorithm.getClass().getSimpleName() +
-                ", expId=" + expId +
+                "expId=" + expId +
                 ", cs1ResultNum=" + cs1ResultNum +
                 ", cs2ResultNum=" + cs2ResultNum +
                 ", cs1GroupNum=" + cs1GroupNum +

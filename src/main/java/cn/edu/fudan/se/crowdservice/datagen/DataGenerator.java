@@ -8,7 +8,11 @@ public interface DataGenerator<T> {
 
     class Gaussian2Sigma {
         static double get(Random random) {
-            return Math.min(Math.max(random.nextGaussian(), -2), 2);
+            double result;
+            do {
+                result = random.nextGaussian();
+            } while (Math.abs(result) > 2);
+            return result;
         }
     }
 }

@@ -4,8 +4,6 @@ import cn.edu.fudan.se.crowdservice.Parameter;
 import cn.edu.fudan.se.crowdservice.bean.*;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,31 +14,23 @@ public class TianHuatAlgorithm implements Algorithm {
 
     @Override
     public TimeCost globalOptimize(AlgorithmParameter parameter) {
-        Map<String, WorkerSelectionResult> results = globalOptimize(parameter, ITERATION_NUM, "go").selectionResult();
-        WorkerSelectionResult result = results.get(parameter.currentService());
+        WorkerSelectionResult result = globalOptimize(parameter, "go");
         if (result == null) {
             throw new RuntimeException("Global Optimization Fails");
         }
-        return new TimeCost().cost(result.totalCost()).time(result.maxResponseTime());
+        return result.planTimeCost();
     }
 
     @Override
-    public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
-        List<CrowdWorker> crowdWorkers = new LinkedList<>();
-        Map<String, WorkerSelectionResult> results = globalOptimize(parameter, ITERATION_NUM, "ws").selectionResult();
-        WorkerSelectionResult cw = results.get(parameter.currentService());
-        if (cw == null) {
+    public WorkerSelectionResult workerSelection(AlgorithmParameter parameter) {
+        WorkerSelectionResult wsr = globalOptimize(parameter, "ws");
+        if (wsr == null || wsr.workers().size() == 0) {
             throw new RuntimeException("Worker Selection Fails");
         }
-        for (CrowdWorker worker : cw.workers()) {
-            if (worker.selected()) {
-                crowdWorkers.add(worker);
-            }
-        }
-        return crowdWorkers;
+        return wsr;
     }
 
-    private OptimizationResult globalOptimize(AlgorithmParameter parameter, int iterationNum, String invoker) {
+    private WorkerSelectionResult globalOptimize(AlgorithmParameter parameter, String invoker) {
         try {
             Map<String, ServiceSetting> serviceSettings = parameter.serviceSettings();
 
@@ -48,7 +38,7 @@ public class TianHuatAlgorithm implements Algorithm {
             String outputPath = String.format("%sEXP-%d-%s-%s-output", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService(), invoker);
 
             PrintWriter input = new PrintWriter(new OutputStreamWriter(new FileOutputStream(inputPath, false)));
-            input.printf("time=%d,cost=%f,numOfGeneration=%d\n", parameter.deadline(), parameter.cost(), iterationNum);
+            input.printf("time=%d,cost=%f,numOfGeneration=%d\n", parameter.deadline(), parameter.cost(), ITERATION_NUM);
             input.println("===");
             for (String service : serviceSettings.keySet()) {
                 input.println("key=" + service);
@@ -81,7 +71,7 @@ public class TianHuatAlgorithm implements Algorithm {
                     output.flush();
                     output.close();
                 }
-            })));
+            }))).selectionResult().get(parameter.currentService());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

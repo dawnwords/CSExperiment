@@ -1,10 +1,9 @@
 package cn.edu.fudan.se.crowdservice.algorithm;
 
+import cn.edu.fudan.se.crowdservice.Parameter;
 import cn.edu.fudan.se.crowdservice.bean.AlgorithmParameter;
-import cn.edu.fudan.se.crowdservice.bean.CrowdWorker;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
-
-import java.util.List;
+import cn.edu.fudan.se.crowdservice.bean.WorkerSelectionResult;
 
 
 /**
@@ -13,23 +12,29 @@ import java.util.List;
 public interface Algorithm {
     TimeCost globalOptimize(AlgorithmParameter parameter);
 
-    List<CrowdWorker> workerSelection(AlgorithmParameter parameter);
+    WorkerSelectionResult workerSelection(AlgorithmParameter parameter);
 
-    enum AlgorithmClass {
-        th(TianHuatAlgorithm.class),
-        cs(OnlyCostNaiveAlgorithm.class),
-        rp(OnlyReputationNavieAlgorithm.class),
-        rt(OnlyResponseTimeNaiveAlgorithm.class),
-        mx(MixedNaiveAlgorithm.class);
+    enum AlgorithmFactory {
+        th(new TianHuatAlgorithm()),
+        cs(new OnlyCostNaiveAlgorithm()),
+        rp(new OnlyReputationNavieAlgorithm()),
+        rt(new OnlyResponseTimeNaiveAlgorithm()),
+        mx(new MixedNaiveAlgorithm());
 
-        private Class<? extends Algorithm> cls;
+        private Algorithm instance;
+        private int times;
 
-        AlgorithmClass(Class<? extends Algorithm> cls) {
-            this.cls = cls;
+        AlgorithmFactory(Algorithm instance) {
+            this.instance = instance;
+            this.times = Parameter.instance().times(this);
         }
 
-        public Class cls() {
-            return cls;
+        public Algorithm instance() {
+            return instance;
+        }
+
+        public int times() {
+            return times;
         }
     }
 }

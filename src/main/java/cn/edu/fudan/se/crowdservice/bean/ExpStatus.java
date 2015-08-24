@@ -8,8 +8,7 @@ public class ExpStatus {
     private int expid;
     private int workerid;
     private String cs;
-    private boolean selected;
-    private boolean success;
+    private String algorithm;
 
     public int id() {
         return id;
@@ -47,21 +46,12 @@ public class ExpStatus {
         return this;
     }
 
-    public boolean selected() {
-        return selected;
+    public String algorithm() {
+        return algorithm;
     }
 
-    public ExpStatus selected(boolean selected) {
-        this.selected = selected;
-        return this;
-    }
-
-    public boolean success() {
-        return success;
-    }
-
-    public ExpStatus success(boolean success) {
-        this.success = success;
+    public ExpStatus algorithm(String algorithm) {
+        this.algorithm = algorithm;
         return this;
     }
 }

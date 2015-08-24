@@ -19,15 +19,14 @@ public class InsertExpStatusDAO extends DAO<Boolean> {
 
     @Override
     protected Boolean processData(Connection connection) throws Exception {
-        String sql = "INSERT INTO expstatus(expid,workerid,cs,selected,success) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO expstatus(expid,workerid,cs,algorithm) VALUES (?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         int updateCount = 0;
         for (ExpStatus status : expStatus) {
             ps.setInt(1, status.expid());
             ps.setInt(2, status.workerid());
             ps.setString(3, status.cs());
-            ps.setBoolean(4, status.selected());
-            ps.setBoolean(5, status.success());
+            ps.setString(4, status.algorithm());
             if (ps.executeUpdate() == 1) {
                 updateCount++;
             }

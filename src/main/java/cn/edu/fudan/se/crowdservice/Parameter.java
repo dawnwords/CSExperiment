@@ -1,6 +1,8 @@
 package cn.edu.fudan.se.crowdservice;
 
 import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
+import cn.edu.fudan.se.crowdservice.bean.TimeCost;
+import cn.edu.fudan.se.crowdservice.datagen.Random;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,7 @@ public class Parameter {
 
     private static Parameter instance = new Parameter();
     private final Properties properties;
+    private final Random workerRandom;
 
     private Parameter() {
         properties = new Properties();
@@ -21,6 +24,7 @@ public class Parameter {
             File ioDir = new File(ioPath());
             ioDir.deleteOnExit();
             ioDir.mkdirs();
+            workerRandom = new Random(Long.parseLong(properties.getProperty("worker_seed")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,11 +73,73 @@ public class Parameter {
         return properties.getProperty("io_path");
     }
 
-    public Algorithm algorithm() {
-        try {
-            return (Algorithm) Algorithm.AlgorithmClass.valueOf(properties.getProperty("algorithm")).cls().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public int times(Algorithm.AlgorithmFactory algorithm) {
+        return Integer.parseInt(properties.getProperty(algorithm.name() + "_times"));
+    }
+
+    public int workerSize() {
+        return Integer.parseInt(properties.getProperty("worker_size"));
+    }
+
+    public Random workerRandom() {
+        return workerRandom;
+    }
+
+    public double csAvg() {
+        return Double.parseDouble(properties.getProperty("worker_cs_avg"));
+    }
+
+    public double csSd() {
+        return Double.parseDouble(properties.getProperty("worker_cs_sd"));
+    }
+
+    public double rpAvg() {
+        return Double.parseDouble(properties.getProperty("worker_rp_avg"));
+    }
+
+    public double rpSd() {
+        return Double.parseDouble(properties.getProperty("worker_rp_sd"));
+    }
+
+    public long rtLow() {
+        return Long.parseLong(properties.getProperty("worker_rt_low"));
+    }
+
+    public long rtRange() {
+        return Long.parseLong(properties.getProperty("worker_rt_range"));
+    }
+
+    public boolean clearWorkers() {
+        return Boolean.valueOf(properties.getProperty("clear_workers"));
+    }
+
+    public boolean clearExps() {
+        return Boolean.valueOf(properties.getProperty("clear_exps"));
+    }
+
+    public int expTimes() {
+        return Integer.parseInt(properties.getProperty("exp_times"));
+    }
+
+    public int executeTimes() {
+        return Integer.parseInt(properties.getProperty("execute_times"));
+    }
+
+    public String resultNums() {
+        return properties.getProperty("result_num");
+    }
+
+    public String workerGroupSize() {
+        return properties.getProperty("worker_group");
+    }
+
+    public TimeCost totalTimeCost() {
+        return new TimeCost()
+                .cost(Double.parseDouble(properties.getProperty("total_cost")))
+                .time(Long.parseLong(properties.getProperty("deadline")));
+    }
+
+    public Random workerGroupRandom() {
+        return new Random(Long.parseLong(properties.getProperty("worker_group_seed")));
     }
 }

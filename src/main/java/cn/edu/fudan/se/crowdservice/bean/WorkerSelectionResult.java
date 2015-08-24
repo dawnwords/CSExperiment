@@ -9,11 +9,16 @@ import java.util.List;
 public class WorkerSelectionResult {
     List<CrowdWorker> workers = new ArrayList<>();
     private String service;
-    private double totalCost;
-    private long maxResponseTime;
+    private TimeCost executeTimeCost = new TimeCost();
+    private TimeCost planTimeCost = new TimeCost();
 
     public List<CrowdWorker> workers() {
         return workers;
+    }
+
+    public WorkerSelectionResult workers(List<CrowdWorker> workers) {
+        this.workers = workers;
+        return this;
     }
 
     public WorkerSelectionResult addWorker(CrowdWorker worker) {
@@ -30,21 +35,31 @@ public class WorkerSelectionResult {
         return this;
     }
 
-    public double totalCost() {
-        return totalCost;
+    public TimeCost executeTimeCost() {
+        return executeTimeCost;
     }
 
-    public WorkerSelectionResult totalCost(double totalCost) {
-        this.totalCost = totalCost;
+    public TimeCost planTimeCost() {
+        return planTimeCost;
+    }
+
+    public WorkerSelectionResult executeTime(long time) {
+        this.executeTimeCost.time(time);
         return this;
     }
 
-    public long maxResponseTime() {
-        return maxResponseTime;
+    public WorkerSelectionResult executeCost(double cost) {
+        this.executeTimeCost.cost(cost);
+        return this;
     }
 
-    public WorkerSelectionResult maxResponseTime(long maxResponseTime) {
-        this.maxResponseTime = maxResponseTime;
+    public WorkerSelectionResult planTime(long time) {
+        this.planTimeCost.time(time);
+        return this;
+    }
+
+    public WorkerSelectionResult planCost(double cost) {
+        this.planTimeCost.cost(cost);
         return this;
     }
 }

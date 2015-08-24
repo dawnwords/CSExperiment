@@ -50,21 +50,22 @@ public abstract class NaiveAlgorithm implements Algorithm {
     }
 
     @Override
-    public List<CrowdWorker> workerSelection(AlgorithmParameter parameter) {
+    public WorkerSelectionResult workerSelection(AlgorithmParameter parameter) {
         List<CrowdWorker> cw = rank(parameter, "ws").get(parameter.currentService()).workerGroup();
-        double totalCost = parameter.cost();
         WorkerSelectionResult print = new WorkerSelectionResult().service(parameter.currentService());
-        ArrayList<CrowdWorker> result = new ArrayList<>();
+        WorkerSelectionResult result = new WorkerSelectionResult();
+
+        double totalCost = parameter.cost();
         for (CrowdWorker worker : cw) {
             if (totalCost > worker.cost()) {
                 totalCost -= worker.cost();
-                result.add(worker);
+                result.addWorker(worker);
                 print.addWorker(worker);
             }
         }
         printResult(Collections.singletonList(print),
                 String.format("%sEXP-%d-%s-ws-output", Parameter.instance().ioPath(), parameter.expId(), parameter.currentService()));
-        if (result.size() == 0) {
+        if (result.workers().size() == 0) {
             throw new RuntimeException("Worker Selection Fail");
         }
         return result;

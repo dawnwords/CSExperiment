@@ -38,58 +38,59 @@ public class ResetDBDAO extends DAO<Boolean> {
         if (!ignoreExpinput) {
             statement.addBatch("DROP TABLE IF EXISTS `expinput`");
             statement.addBatch("CREATE TABLE `expinput` (\n" +
-                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
-                    "  `cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1resultNum` INT(10) DEFAULT NULL,\n" +
-                    "  `cs1deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1realResultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1success` BIT(1) DEFAULT NULL,\n" +
-                    "  `cs2resultNum` INT(10) DEFAULT NULL,\n" +
-                    "  `cs2deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2cost` DOUBLE(20,2) DEFAULT NULL,\n" +
-                    "  `cs2realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2realResultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2success` BIT(1) DEFAULT NULL,\n" +
-                    "  `cs3resultNum` INT(10) DEFAULT NULL,\n" +
-                    "  `cs3deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3cost` DOUBLE(20,2) DEFAULT NULL,\n" +
-                    "  `cs3realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3realResultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3success` BIT(1) DEFAULT NULL,\n" +
+                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
+                    "  `cost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `deadline` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs1resultNum` int(10) DEFAULT NULL,\n" +
+                    "  `cs1deadline` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs1cost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `cs1realtime` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs1realcost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `cs2resultNum` int(10) DEFAULT NULL,\n" +
+                    "  `cs2deadline` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs2cost` double(20,2) DEFAULT NULL,\n" +
+                    "  `cs2realtime` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs2realcost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `cs3resultNum` int(10) DEFAULT NULL,\n" +
+                    "  `cs3deadline` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs3cost` double(20,2) DEFAULT NULL,\n" +
+                    "  `cs3realtime` int(20) unsigned DEFAULT NULL,\n" +
+                    "  `cs3realcost` double(20,2) unsigned DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=0 CHARSET=utf8");
+                    ") ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8");
         }
         if (!ignoreExpstatus) {
             statement.addBatch("DROP TABLE IF EXISTS `expstatus`");
             statement.addBatch("CREATE TABLE `expstatus` (\n" +
-                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
-                    "  `expid` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `workerid` INT(10) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs` ENUM('CS3','CS2','CS1') DEFAULT NULL,\n" +
-                    "  `selected` BIT(1) DEFAULT NULL,\n" +
-                    "  `success` BIT(1) DEFAULT NULL,\n" +
+                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
+                    "  `expid` int(10) unsigned DEFAULT NULL,\n" +
+                    "  `workerid` int(10) unsigned DEFAULT NULL,\n" +
+                    "  `cs` enum('cs3','cs2','cs1') DEFAULT NULL,\n" +
+                    "  `algorithm` enum('') DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`),\n" +
                     "  KEY `FK_expid` (`expid`),\n" +
                     "  KEY `FK_workerid` (`workerid`),\n" +
-                    "  CONSTRAINT `FK_expid` FOREIGN KEY (`expid`) REFERENCES `expinput` (`id`),\n" +
-                    "  CONSTRAINT `FK_workerid` FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`)\n" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=0 CHARSET=utf8");
+                    "  CONSTRAINT `expstatus_ibfk_1` FOREIGN KEY (`expid`) REFERENCES `expinput` (`id`),\n" +
+                    "  CONSTRAINT `expstatus_ibfk_2` FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
         if (!ignoreWorker) {
             statement.addBatch("DROP TABLE IF EXISTS `worker`");
             statement.addBatch("CREATE TABLE `worker` (\n" +
-                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
-                    "  `cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `reliability` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
-                    "  `responseTime` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
+                    "  `cost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `reliability` double(20,18) unsigned DEFAULT NULL,\n" +
+                    "  `responseTime` int(10) unsigned DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8");
+                    ") ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8");
+            statement.addBatch("DROP TABLE IF EXISTS `workersuccess`");
+            statement.addBatch("CREATE TABLE `workersuccess` (\n" +
+                    "  `workerid` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `expno` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `success` BIT(1) DEFAULT NULL,\n" +
+                    "  KEY `FK_worker` (`workerid`),\n" +
+                    "  CONSTRAINT `FK_worker` FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
         return statement.executeBatch().length > 0;
     }

@@ -55,9 +55,9 @@ public class OptimizationResult {
                     } else if (line.startsWith("CrowdWorker")) {
                         result.addWorker(CrowdWorker.toBean(line));
                     } else if (line.startsWith("Total Cost")) {
-                        result.totalCost((Double) Parser.toDouble.parse(getValue(line, "Total Cost={double}")));
+                        result.executeCost((Double) Parser.toDouble.parse(getValue(line, "Total Cost={double}")));
                     } else if (line.startsWith("Max Response Time")) {
-                        result.maxResponseTime((Long) Parser.toLong.parse(getValue(line, "Max Response Time={long}")));
+                        result.executeTime((Long) Parser.toLong.parse(getValue(line, "Max Response Time={long}")));
                     }
                 } else if (allocTimeCostStart) {
                     String key = line.substring(4, line.indexOf('{') - 1);
@@ -67,8 +67,7 @@ public class OptimizationResult {
                     if (wsr == null) {
                         throw new RuntimeException("key not exists:" + key);
                     }
-                    wsr.maxResponseTime((Long) Parser.toLong.parse(time))
-                            .totalCost((Double) Parser.toDouble.parse(cost));
+                    wsr.planTime((Long) Parser.toLong.parse(time)).planCost((Double) Parser.toDouble.parse(cost));
                 }
             }
             return this;

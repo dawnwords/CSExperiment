@@ -7,6 +7,14 @@ public class TimeCost {
     private long time;
     private double cost;
 
+    public TimeCost() {
+    }
+
+    public TimeCost(TimeCost timeCost) {
+        this.time = timeCost.time;
+        this.cost = timeCost.cost;
+    }
+
     public long time() {
         return time;
     }

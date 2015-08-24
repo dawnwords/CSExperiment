@@ -1,7 +1,7 @@
 package cn.edu.fudan.se.crowdservice.explogic;
 
 import cn.edu.fudan.se.crowdservice.Parameter;
-import cn.edu.fudan.se.crowdservice.algorithm.Algorithm;
+import cn.edu.fudan.se.crowdservice.algorithm.Algorithm.AlgorithmFactory;
 import cn.edu.fudan.se.crowdservice.bean.*;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerGroupDAO;
 import cn.edu.fudan.se.crowdservice.dao.InsertExpInputDAO;
@@ -25,70 +25,68 @@ public class Experiment {
     }
 
     public void preform() {
-        Random workerGroupRandom = Parameter.instance().workerGroupRandom();
-        for (int i = 0; i < Parameter.instance().expTimes(); i++) {
-            input = new InsertExpInputDAO().expTimes(i).input(input).getResult();
-            preformAlgorithm(new GenerateWorkerGroupDAO()
-                    .cs1GroupNum(input.cs1GroupNum())
-                    .cs2GroupNum(input.cs2GroupNum())
-                    .cs3GroupNum(input.cs3GroupNum())
-                    .random(workerGroupRandom).getResult());
-        }
-    }
+        for (AlgorithmFactory algorithm : AlgorithmFactory.values()) {
+            Random workerGroupRandom = Parameter.instance().workerGroupRandom();
+            for (int i = 0; i < Parameter.instance().expTimes(); i++) {
+                CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
+                        .cs1GroupNum(input.cs1GroupNum())
+                        .cs2GroupNum(input.cs2GroupNum())
+                        .cs3GroupNum(input.cs3GroupNum())
+                        .random(workerGroupRandom).getResult();
+                for (int j = 0; j < algorithm.times(); j++) {
+                    input = new InsertExpInputDAO().expTimes(i).input(input).getResult();
+                    AlgorithmParameter cs1GO = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs1Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs1_go.bpel")
+                            .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()))
+                            .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
+                            .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+                    AlgorithmParameter cs1WS = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs1Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs1_ws.bpel")
+                            .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()));
 
-    private void preformAlgorithm(CrowdWorkerGroups workerGroups) {
-        for (Algorithm.AlgorithmFactory algorithm : Algorithm.AlgorithmFactory.values()) {
-            for (int i = 0; i < algorithm.times(); i++) {
-                AlgorithmParameter cs1GO = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs1Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs1_go.bpel")
-                        .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()))
-                        .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
-                        .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
-                AlgorithmParameter cs1WS = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs1Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs1_ws.bpel")
-                        .addServiceSetting(Parameter.instance().cs1Name(), new ServiceSetting().resultNum(input.cs1ResultNum()).workerGroup(workerGroups.cs1Group()));
+                    AlgorithmParameter cs2GO = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs2Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs2_go.bpel")
+                            .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
+                            .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+                    AlgorithmParameter cs2WS = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs2Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs2_ws.bpel")
+                            .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
 
-                AlgorithmParameter cs2GO = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs2Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs2_go.bpel")
-                        .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()))
-                        .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
-                AlgorithmParameter cs2WS = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs2Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs2_ws.bpel")
-                        .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
+                    AlgorithmParameter cs3GO = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs3Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs3_go.bpel")
+                            .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
+                    AlgorithmParameter cs3WS = new AlgorithmParameter()
+                            .expId(input.expId())
+                            .currentService(Parameter.instance().cs3Name())
+                            .bpelPath(Parameter.instance().bpelPath() + "cs3_ws.bpel")
+                            .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
 
-                AlgorithmParameter cs3GO = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs3Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs3_go.bpel")
-                        .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
-                AlgorithmParameter cs3WS = new AlgorithmParameter()
-                        .expId(input.expId())
-                        .currentService(Parameter.instance().cs3Name())
-                        .bpelPath(Parameter.instance().bpelPath() + "cs3_ws.bpel")
-                        .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
-
-                try {
-                    executeCS("CS1", algorithm, cs1GO, cs1WS);
-                    executeCS("CS2", algorithm, cs2GO, cs2WS);
-                    executeCS("CS3", algorithm, cs3GO, cs3WS);
-                } catch (Exception e) {
-                    Logger.info(e.getMessage());
+                    try {
+                        TimeCost totalTimeCost = new TimeCost(input.timeCost());
+                        executeCS("CS1", algorithm, totalTimeCost, cs1GO, cs1WS);
+                        executeCS("CS2", algorithm, totalTimeCost, cs2GO, cs2WS);
+                        executeCS("CS3", algorithm, totalTimeCost, cs3GO, cs3WS);
+                    } catch (Exception e) {
+                        Logger.info(e.getMessage());
+                    }
                 }
             }
         }
     }
 
-    private void executeCS(String cs, Algorithm.AlgorithmFactory algorithm, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
+    private void executeCS(String cs, AlgorithmFactory algorithm, TimeCost totalTimeCost, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
         Logger.info("Executing Exp%d-%s", globalPlanningPara.expId(), cs);
-        globalPlanningPara.timeCost(input.timeCost());
+        globalPlanningPara.timeCost(totalTimeCost);
         TimeCost planTC = algorithm.instance().globalOptimize(globalPlanningPara);
         Logger.info("Global Optimize:" + planTC);
 
@@ -113,6 +111,6 @@ public class Experiment {
                 .realTC(realTC)
                 .cs(cs).getResult();
         Logger.info("Finish Executing: %s", realTC);
-        input.timeCost().minus(realTC);
+        totalTimeCost.minus(realTC);
     }
 }

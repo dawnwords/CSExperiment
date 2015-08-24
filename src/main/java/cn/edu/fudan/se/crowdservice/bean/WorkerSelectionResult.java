@@ -39,6 +39,11 @@ public class WorkerSelectionResult {
         return executeTimeCost;
     }
 
+    public WorkerSelectionResult executeTimeCost(TimeCost executeTimeCost) {
+        this.executeTimeCost = executeTimeCost;
+        return this;
+    }
+
     public TimeCost planTimeCost() {
         return planTimeCost;
     }

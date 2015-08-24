@@ -38,36 +38,36 @@ public class ResetDBDAO extends DAO<Boolean> {
         if (!ignoreExpinput) {
             statement.addBatch("DROP TABLE IF EXISTS `expinput`");
             statement.addBatch("CREATE TABLE `expinput` (\n" +
-                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
-                    "  `exptimes` int(10) unsigned DEFAULT NULL,\n" +
-                    "  `cost` double(20,2) unsigned DEFAULT NULL,\n" +
-                    "  `deadline` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs1resultNum` int(10) DEFAULT NULL,\n" +
-                    "  `cs1deadline` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs1cost` double(20,2) unsigned DEFAULT NULL,\n" +
-                    "  `cs1realtime` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs1realcost` double(20,2) unsigned DEFAULT NULL,\n" +
-                    "  `cs2resultNum` int(10) DEFAULT NULL,\n" +
-                    "  `cs2deadline` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs2cost` double(20,2) DEFAULT NULL,\n" +
-                    "  `cs2realtime` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs2realcost` double(20,2) unsigned DEFAULT NULL,\n" +
-                    "  `cs3resultNum` int(10) DEFAULT NULL,\n" +
-                    "  `cs3deadline` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs3cost` double(20,2) DEFAULT NULL,\n" +
-                    "  `cs3realtime` int(20) unsigned DEFAULT NULL,\n" +
-                    "  `cs3realcost` double(20,2) unsigned DEFAULT NULL,\n" +
+                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
+                    "  `exptimes` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs1resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs1deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs1cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs1realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs1realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs2resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs2deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs2cost` DOUBLE(20,2) DEFAULT NULL,\n" +
+                    "  `cs2realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs2realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs3deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3cost` DOUBLE(20,2) DEFAULT NULL,\n" +
+                    "  `cs3realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
         if (!ignoreExpstatus) {
             statement.addBatch("DROP TABLE IF EXISTS `expstatus`");
             statement.addBatch("CREATE TABLE `expstatus` (\n" +
-                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
-                    "  `expid` int(10) unsigned DEFAULT NULL,\n" +
-                    "  `workerid` int(10) unsigned DEFAULT NULL,\n" +
-                    "  `cs` enum('cs3','cs2','cs1') DEFAULT NULL,\n" +
-                    "  `algorithm` enum('cs','rp','rt','th') DEFAULT NULL,\n" +
+                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
+                    "  `expid` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `workerid` INT(10) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs` ENUM('cs3','cs2','cs1') DEFAULT NULL,\n" +
+                    "  `algorithm` ENUM('cs','rp','rt','mx','th') DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`),\n" +
                     "  KEY `FK_expid` (`expid`),\n" +
                     "  KEY `FK_workerid` (`workerid`),\n" +
@@ -78,10 +78,10 @@ public class ResetDBDAO extends DAO<Boolean> {
         if (!ignoreWorker) {
             statement.addBatch("DROP TABLE IF EXISTS `worker`");
             statement.addBatch("CREATE TABLE `worker` (\n" +
-                    "  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,\n" +
-                    "  `cost` double(20,2) unsigned DEFAULT NULL,\n" +
-                    "  `reliability` double(20,18) unsigned DEFAULT NULL,\n" +
-                    "  `responseTime` int(10) unsigned DEFAULT NULL,\n" +
+                    "  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\n" +
+                    "  `cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
+                    "  `reliability` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
+                    "  `responseTime` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  PRIMARY KEY (`id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
             statement.addBatch("DROP TABLE IF EXISTS `workersuccess`");
@@ -93,6 +93,22 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  CONSTRAINT `FK_worker` FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
+        statement.addBatch("DROP VIEW IF EXISTS `expresult`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `expresult` AS " +
+                "SELECT `expinput`.`id` AS `id`," +
+                "`expinput`.`exptimes` AS `exptimes`," +
+                "`expinput`.`cost` AS `cost`," +
+                "`expinput`.`deadline` AS `deadline`," +
+                "`expinput`.`cs1resultNum` AS `cs1resultNum`," +
+                "`expinput`.`cs2resultNum` AS `cs2resultNum`," +
+                "`expinput`.`cs3resultNum` AS `cs3resultNum`," +
+                "`workersuccess`.`expno` AS `expno`," +
+                "sum(`workersuccess`.`success`) AS `success`," +
+                "`expstatus`.`cs` AS `cs` " +
+                "FROM (((`expinput` JOIN `expstatus` ON((`expstatus`.`expid` = `expinput`.`id`))) " +
+                "JOIN `worker` ON((`expstatus`.`workerid` = `worker`.`id`))) " +
+                "JOIN `workersuccess` ON((`workersuccess`.`workerid` = `worker`.`id`))) " +
+                "GROUP BY `workersuccess`.`expno`,`expstatus`.`cs`,`expinput`.`id`");
         return statement.executeBatch().length > 0;
     }
 }

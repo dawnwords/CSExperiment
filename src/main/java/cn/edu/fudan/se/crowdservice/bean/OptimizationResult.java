@@ -25,12 +25,21 @@ public class OptimizationResult {
             this.selectionResult = new HashMap<>();
 
             boolean selectionResultStart = false;
+            boolean allocTimeCostStart = false;
             WorkerSelectionResult result = new WorkerSelectionResult();
             while ((line = input.readLine()) != null) {
                 if (line.matches("(\\s)*")) {
                     continue;
                 }
+                if (line.contains("Allocated Time and Cost")) {
+                    allocTimeCostStart = true;
+                    continue;
+                }
                 if (line.startsWith("=")) {
+                    if (allocTimeCostStart) {
+                        allocTimeCostStart = false;
+                        continue;
+                    }
                     if (selectionResultStart) {
                         selectionResultStart = false;
                         this.selectionResult.put(result.service(), result);
@@ -50,6 +59,16 @@ public class OptimizationResult {
                     } else if (line.startsWith("Max Response Time")) {
                         result.maxResponseTime((Long) Parser.toLong.parse(getValue(line, "Max Response Time={long}")));
                     }
+                } else if (allocTimeCostStart) {
+                    String key = line.substring(4, line.indexOf('{') - 1);
+                    String time = line.substring(line.indexOf('{') + 6, line.indexOf(','));
+                    String cost = line.substring(line.indexOf(',') + 7, line.indexOf('}'));
+                    WorkerSelectionResult wsr = selectionResult.get(key);
+                    if (wsr == null) {
+                        throw new RuntimeException("key not exists:" + key);
+                    }
+                    wsr.maxResponseTime((Long) Parser.toLong.parse(time))
+                            .totalCost((Double) Parser.toDouble.parse(cost));
                 }
             }
             return this;

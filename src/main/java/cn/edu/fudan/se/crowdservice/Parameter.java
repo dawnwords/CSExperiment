@@ -19,9 +19,8 @@ public class Parameter {
         try {
             properties.load(this.getClass().getResourceAsStream("/settings.properties"));
             File ioDir = new File(ioPath());
-            if (!ioDir.exists() || !ioDir.isDirectory()) {
-                ioDir.mkdirs();
-            }
+            ioDir.deleteOnExit();
+            ioDir.mkdirs();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

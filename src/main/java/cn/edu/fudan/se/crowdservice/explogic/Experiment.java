@@ -74,7 +74,7 @@ public class Experiment {
     }
 
     private void executeCS(String cs, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
-        Logger.info("Executing %s", cs);
+        Logger.info("Executing Exp%d-%s", globalPlanningPara.expId(), cs);
         globalPlanningPara.timeCost(input.timeCost());
         TimeCost planTC = input.algorithm().globalOptimize(globalPlanningPara);
         Logger.info("Global Optimize:" + planTC);

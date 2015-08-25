@@ -1,14 +1,18 @@
 package cn.edu.fudan.se.crowdservice;
 
+import cn.edu.fudan.se.crowdservice.bean.ExpResult;
 import cn.edu.fudan.se.crowdservice.bean.ExperimentInput;
 import cn.edu.fudan.se.crowdservice.bean.TimeCost;
 import cn.edu.fudan.se.crowdservice.dao.GenerateWorkerDAO;
 import cn.edu.fudan.se.crowdservice.dao.ResetDBDAO;
+import cn.edu.fudan.se.crowdservice.dao.SelectExpResultDAO;
 import cn.edu.fudan.se.crowdservice.explogic.Experiment;
 import cn.edu.fudan.se.crowdservice.util.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -30,7 +34,43 @@ public class Main {
             }
         }
         Logger.info("==============================================");
-        //TODO calculate result
+        printResult();
+    }
+
+    private static void printResult() {
+        List<ExpResult> results = new SelectExpResultDAO().getResult();
+        Map<String, ArrayList<ExpResult>> table = new HashMap<>();
+        for (ExpResult result : results) {
+            ArrayList<ExpResult> er = table.get(result.algoritm());
+            if (er == null) {
+                er = new ArrayList<>();
+                table.put(result.algoritm(), er);
+            }
+            er.add(result.settingId(), result);
+        }
+
+        boolean printHeader = true;
+        StringBuilder sb = new StringBuilder();
+        for (String algorithm : table.keySet()) {
+            ArrayList<ExpResult> array = table.get(algorithm);
+            if (printHeader) {
+                sb.append("Algorithm\t");
+                for (ExpResult result : array) {
+                    sb.append(result.setting());
+                    sb.append("\t");
+                }
+                sb.append('\n');
+                printHeader = false;
+            }
+            sb.append(algorithm);
+            sb.append('\t');
+            for (ExpResult result : array) {
+                sb.append(result.successRate());
+                sb.append("\t");
+            }
+            sb.append('\n');
+        }
+        System.out.println(sb.toString());
     }
 
     private static void resetDB() {

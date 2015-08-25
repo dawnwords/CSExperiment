@@ -4,7 +4,6 @@ package cn.edu.fudan.se.crowdservice.bean;
  * Created by Dawnwords on 2015/8/6.
  */
 public class ExperimentInput {
-    //TODO + settingId
     private int expId, settingId;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
     private int cs1GroupNum, cs2GroupNum, cs3GroupNum;

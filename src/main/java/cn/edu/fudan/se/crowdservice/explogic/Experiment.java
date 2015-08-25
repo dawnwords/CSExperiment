@@ -60,11 +60,6 @@ public class Experiment {
                             .bpelPath(Parameter.instance().bpelPath() + "cs2_ws.bpel")
                             .addServiceSetting(Parameter.instance().cs2Name(), new ServiceSetting().resultNum(input.cs2ResultNum()).workerGroup(workerGroups.cs2Group()));
 
-                    AlgorithmParameter cs3GO = new AlgorithmParameter()
-                            .expId(input.expId())
-                            .currentService(Parameter.instance().cs3Name())
-                            .bpelPath(Parameter.instance().bpelPath() + "cs3_go.bpel")
-                            .addServiceSetting(Parameter.instance().cs3Name(), new ServiceSetting().resultNum(input.cs3ResultNum()).workerGroup(workerGroups.cs3Group()));
                     AlgorithmParameter cs3WS = new AlgorithmParameter()
                             .expId(input.expId())
                             .currentService(Parameter.instance().cs3Name())
@@ -75,7 +70,7 @@ public class Experiment {
                         TimeCost totalTimeCost = new TimeCost(input.timeCost());
                         executeCS("CS1", algorithm, totalTimeCost, cs1GO, cs1WS);
                         executeCS("CS2", algorithm, totalTimeCost, cs2GO, cs2WS);
-                        executeCS("CS3", algorithm, totalTimeCost, cs3GO, cs3WS);
+                        executeCS("CS3", algorithm, totalTimeCost, cs3WS);
                     } catch (Exception e) {
                         Logger.info(e.getMessage());
                     }
@@ -84,12 +79,19 @@ public class Experiment {
         }
     }
 
-    private void executeCS(String cs, AlgorithmFactory algorithm, TimeCost totalTimeCost, AlgorithmParameter globalPlanningPara, AlgorithmParameter workerSelectionPara) {
-        Logger.info("Executing Exp%d-%s", globalPlanningPara.expId(), cs);
-        globalPlanningPara.timeCost(totalTimeCost);
-        TimeCost planTC = algorithm.instance().globalOptimize(globalPlanningPara);
-        Logger.info("Global Optimize:" + planTC);
-
+    private void executeCS(String cs, AlgorithmFactory algorithm, TimeCost totalTimeCost, AlgorithmParameter... parameters) {
+        Logger.info("Executing Exp%d-%s", parameters[0].expId(), cs);
+        TimeCost planTC;
+        AlgorithmParameter workerSelectionPara;
+        if (parameters.length == 2) {
+            parameters[0].timeCost(totalTimeCost);
+            planTC = algorithm.instance().globalOptimize(parameters[0]);
+            Logger.info("Global Optimize:" + planTC);
+            workerSelectionPara = parameters[1];
+        } else {
+            planTC = totalTimeCost;
+            workerSelectionPara = parameters[0];
+        }
         workerSelectionPara.timeCost(planTC);
         WorkerSelectionResult result = algorithm.instance().workerSelection(workerSelectionPara);
         Logger.info("Worker Selection:");

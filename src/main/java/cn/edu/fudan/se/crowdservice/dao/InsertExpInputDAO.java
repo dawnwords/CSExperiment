@@ -27,14 +27,15 @@ public class InsertExpInputDAO extends DAO<ExperimentInput> {
 
     @Override
     protected ExperimentInput processData(Connection connection) throws Exception {
-        String sql = "INSERT INTO expinput(exptimes, cost, deadline, cs1resultNum, cs2resultNum, cs3resultNum) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO expinput(settingid, exptimes, cost, deadline, cs1resultNum, cs2resultNum, cs3resultNum) VALUES (?,?,?,?,?,?,?)";
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, expTimes);
-        ps.setDouble(2, input.timeCost().cost());
-        ps.setLong(3, input.timeCost().time());
-        ps.setInt(4, input.cs1ResultNum());
-        ps.setInt(5, input.cs2ResultNum());
-        ps.setInt(6, input.cs3ResultNum());
+        ps.setInt(1, input.settingId());
+        ps.setInt(2, expTimes);
+        ps.setDouble(3, input.timeCost().cost());
+        ps.setLong(4, input.timeCost().time());
+        ps.setInt(5, input.cs1ResultNum());
+        ps.setInt(6, input.cs2ResultNum());
+        ps.setInt(7, input.cs3ResultNum());
         ps.executeUpdate();
         ResultSet rs = ps.getGeneratedKeys();
         if (rs == null || !rs.next()) {

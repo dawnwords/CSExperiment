@@ -4,7 +4,8 @@ package cn.edu.fudan.se.crowdservice.bean;
  * Created by Dawnwords on 2015/8/6.
  */
 public class ExperimentInput {
-    private int expId;
+    //TODO + settingId
+    private int expId, settingId;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
     private int cs1GroupNum, cs2GroupNum, cs3GroupNum;
     private TimeCost timeCost;
@@ -15,6 +16,15 @@ public class ExperimentInput {
 
     public ExperimentInput expId(int expId) {
         this.expId = expId;
+        return this;
+    }
+
+    public int settingId() {
+        return settingId;
+    }
+
+    public ExperimentInput settingId(int settingId) {
+        this.settingId = settingId;
         return this;
     }
 

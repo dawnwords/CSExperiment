@@ -8,7 +8,7 @@ public class ExpResult {
     private String algorithm;
     private TimeCost timeCost;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
-    private double successRate;
+    private double cs1successRate, cs2successRate, cs3successRate, successRate;
 
     public ExpResult settingId(int settingId) {
         this.settingId = settingId;
@@ -55,6 +55,33 @@ public class ExpResult {
 
     public double successRate() {
         return successRate;
+    }
+
+    public double cs1successRate() {
+        return cs1successRate;
+    }
+
+    public ExpResult cs1successRate(double cs1successRate) {
+        this.cs1successRate = cs1successRate;
+        return this;
+    }
+
+    public double cs2successRate() {
+        return cs2successRate;
+    }
+
+    public ExpResult cs2successRate(double cs2successRate) {
+        this.cs2successRate = cs2successRate;
+        return this;
+    }
+
+    public double cs3successRate() {
+        return cs3successRate;
+    }
+
+    public ExpResult cs3successRate(double cs3successRate) {
+        this.cs3successRate = cs3successRate;
+        return this;
     }
 
     public String setting() {

@@ -46,19 +46,22 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  `exptimes` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs1resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs1successrate` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs1resultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs1deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs1cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs1realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs1realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs2successrate` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs2resultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs2deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs2cost` DOUBLE(20,2) DEFAULT NULL,\n" +
+                    "  `cs2cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs2realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs2realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3resultNum` INT(10) DEFAULT NULL,\n" +
+                    "  `cs3successrate` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
+                    "  `cs3resultNum` INT(10) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs3deadline` INT(20) UNSIGNED DEFAULT NULL,\n" +
-                    "  `cs3cost` DOUBLE(20,2) DEFAULT NULL,\n" +
+                    "  `cs3cost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs3realtime` INT(20) UNSIGNED DEFAULT NULL,\n" +
                     "  `cs3realcost` DOUBLE(20,2) UNSIGNED DEFAULT NULL,\n" +
                     "  `successrate` DOUBLE(20,18) UNSIGNED DEFAULT NULL,\n" +
@@ -90,6 +93,8 @@ public class ResetDBDAO extends DAO<Boolean> {
                     "  PRIMARY KEY (`id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
+        statement.addBatch("DROP VIEW IF EXISTS `successrate`");
+        statement.addBatch("CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `successrate` AS SELECT `expinput`.`algorithm` AS `algorithm`,`expinput`.`settingid` AS `settingid`,`expinput`.`exptimes` AS `exptimes`,`expinput`.`cost` AS `cost`,`expinput`.`deadline` AS `deadline`,`expinput`.`cs1resultNum` AS `cs1resultNum`,`expinput`.`cs2resultNum` AS `cs2resultNum`,`expinput`.`cs3resultNum` AS `cs3resultNum`,count(`expinput`.`algorithm`) AS `total`,(sum(`expinput`.`successrate`) / count(`expinput`.`algorithm`)) AS `successrate`,(sum(`expinput`.`cs1successrate`) / count(`expinput`.`algorithm`)) AS `cs1successrate`,(sum(`expinput`.`cs2successrate`) / count(`expinput`.`algorithm`)) AS `cs2successrate`,(sum(`expinput`.`cs3successrate`) / count(`expinput`.`algorithm`)) AS `cs3successrate` FROM `expinput` GROUP BY `expinput`.`algorithm`,`expinput`.`settingid`");
         return statement.executeBatch().length > 0;
     }
 }

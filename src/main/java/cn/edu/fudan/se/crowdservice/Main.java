@@ -28,19 +28,17 @@ public class Main {
         resetDB();
         generateWorker();
         Logger.info("Finish Generate Worker: %d time:%.2fs", Parameter.instance().workerSize(), (System.currentTimeMillis() - start) / 1000.0);
-//        start = System.currentTimeMillis();
-//        for (ExperimentInput input : getExperimentInputs()) {
-//            try {
-//                new Experiment(input).preform();
-//            } catch (Exception e) {
-//                Logger.info("Error: %s", e.getMessage());
-//            }
-//        }
-//        Logger.info("==============================================");
-//        Logger.info("Finish Planning: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
-//        start = System.currentTimeMillis();
-//        printResult();
-//        Logger.info("Finish Executing: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
+        start = System.currentTimeMillis();
+        for (ExperimentInput input : getExperimentInputs()) {
+            try {
+                new Experiment(input).preform();
+            } catch (Exception e) {
+                Logger.info("Error: %s", e.getMessage());
+            }
+        }
+        Logger.info("Finish Executing: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
+        Logger.info("==============================================");
+        printResult();
     }
 
     private static void printResult() {
@@ -92,7 +90,6 @@ public class Main {
 
 
     private static void generateWorker() {
-        long start = System.currentTimeMillis();
         if (Parameter.instance().clearWorkers()) {
             new GenerateWorkerDAO()
                     .random(Parameter.instance().workerRandom())

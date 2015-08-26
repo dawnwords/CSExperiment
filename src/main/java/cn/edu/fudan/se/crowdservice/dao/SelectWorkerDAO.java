@@ -17,15 +17,16 @@ public class SelectWorkerDAO extends DAO<List<CrowdWorker>> {
     @Override
     protected List<CrowdWorker> processData(Connection connection) throws Exception {
         Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM worker");
+        ResultSet rs = statement.executeQuery("SELECT id,cost,reliability,responseTime,success FROM worker");
         ArrayList<CrowdWorker> all = new ArrayList<>();
         while (rs.next()) {
-            int id = rs.getInt(1);
-            double cost = rs.getDouble(2);
-            double reliability = rs.getDouble(3);
-            long responseTime = rs.getInt(4);
-            all.add(new CrowdWorker().cost(cost).index(id).reliability(reliability).responseTime(responseTime).selected(false));
-
+            all.add(new CrowdWorker()
+                    .index(rs.getInt(1))
+                    .cost(rs.getDouble(2))
+                    .reliability(rs.getDouble(3))
+                    .responseTime(rs.getInt(4))
+                    .success(rs.getString(5))
+                    .selected(false));
         }
         return all;
     }

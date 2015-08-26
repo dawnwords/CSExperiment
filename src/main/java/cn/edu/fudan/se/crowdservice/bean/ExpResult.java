@@ -5,7 +5,7 @@ package cn.edu.fudan.se.crowdservice.bean;
  */
 public class ExpResult {
     private int settingId;
-    private String algoritm;
+    private String algorithm;
     private TimeCost timeCost;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
     private double successRate;
@@ -19,13 +19,13 @@ public class ExpResult {
         return settingId;
     }
 
-    public ExpResult algoritm(String algoritm) {
-        this.algoritm = algoritm;
+    public ExpResult algorithm(String algoritm) {
+        this.algorithm = algoritm;
         return this;
     }
 
-    public String algoritm() {
-        return algoritm;
+    public String algorithm() {
+        return algorithm;
     }
 
     public ExpResult timeCost(TimeCost timeCost) {

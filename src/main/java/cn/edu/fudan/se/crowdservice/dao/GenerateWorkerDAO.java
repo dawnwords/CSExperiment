@@ -6,8 +6,6 @@ import cn.edu.fudan.se.crowdservice.datagen.WorkerGenerator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 /**
  * Created by Dawnwords on 2015/8/6.
@@ -35,40 +33,17 @@ public class GenerateWorkerDAO extends DAO<Boolean> {
     protected Boolean processData(Connection connection) throws Exception {
         WorkerGenerator workerGen = new WorkerGenerator();
 
-        connection.createStatement().execute("ALTER TABLE `workersuccess` DROP FOREIGN KEY `FK_worker`");
-
-        PreparedStatement insertWorker = connection.prepareStatement(
-                "INSERT INTO worker(cost, reliability, responseTime) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement insertWorkerSuccess = connection.prepareStatement(
-                "INSERT INTO workersuccess(workerid, expno, success) VALUES (?,?,?)");
-
-        try {
-            for (int i = 0; i < workerNumber; i++) {
-                CrowdWorker worker = workerGen.generate(random);
-
-                insertWorker.setDouble(1, worker.cost());
-                insertWorker.setDouble(2, worker.reliability());
-                insertWorker.setLong(3, worker.responseTime());
-                insertWorker.executeUpdate();
-
-                ResultSet rs = insertWorker.getGeneratedKeys();
-                if (rs != null && rs.next()) {
-                    int workerId = rs.getInt(1);
-                    for (int j = 0; j < executeTimes; j++) {
-                        insertWorkerSuccess.setInt(1, workerId);
-                        insertWorkerSuccess.setInt(2, j);
-                        insertWorkerSuccess.setBoolean(3, worker.reliability() > random.nextDouble());
-                        insertWorkerSuccess.addBatch();
-                    }
-                    insertWorkerSuccess.executeBatch();
-                } else {
-                    return false;
-                }
-            }
-            return true;
-        } finally {
-            connection.createStatement().execute("ALTER TABLE `workersuccess` ADD CONSTRAINT `FK_worker` " +
-                    "FOREIGN KEY (`workerid`) REFERENCES `worker` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;\n");
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO worker(cost, reliability, responseTime, success) VALUES (?,?,?,?)");
+        for (int i = 0; i < workerNumber; i++) {
+            CrowdWorker worker = workerGen.generate(random);
+            ps.setDouble(1, worker.cost());
+            ps.setDouble(2, worker.reliability());
+            ps.setLong(3, worker.responseTime());
+            ps.setString(4, worker.success());
+            ps.addBatch();
         }
+        int[] result = ps.executeBatch();
+        for (int r : result) if (r != 1) return false;
+        return true;
     }
 }

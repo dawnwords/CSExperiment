@@ -8,7 +8,6 @@ public class ExpStatus {
     private int expid;
     private int workerid;
     private String cs;
-    private String algorithm;
 
     public int id() {
         return id;
@@ -43,15 +42,6 @@ public class ExpStatus {
 
     public ExpStatus cs(String cs) {
         this.cs = cs;
-        return this;
-    }
-
-    public String algorithm() {
-        return algorithm;
-    }
-
-    public ExpStatus algorithm(String algorithm) {
-        this.algorithm = algorithm;
         return this;
     }
 }

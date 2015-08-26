@@ -10,6 +10,7 @@ public class WorkerGenerator implements DataGenerator<CrowdWorker> {
     private double csAvg, csSd;
     private double rpAvg, rpSd;
     private long rtLow, rtRange;
+    private int executeTime;
 
     public WorkerGenerator() {
         this.csAvg = Parameter.instance().csAvg();
@@ -18,13 +19,22 @@ public class WorkerGenerator implements DataGenerator<CrowdWorker> {
         this.rpSd = Parameter.instance().rpSd();
         this.rtLow = Parameter.instance().rtLow();
         this.rtRange = Parameter.instance().rtRange();
+        this.executeTime = Parameter.instance().executeTimes();
     }
 
     @Override
     public CrowdWorker generate(Random random) {
+        double cost = csAvg + csSd * Gaussian2Sigma.get(random);
+        double reliability = rpAvg + rpSd * Gaussian2Sigma.get(random);
+        long responseTime = (long) (rtLow + rtRange * random.nextDouble());
+        StringBuilder success = new StringBuilder();
+        for (int i = 0; i < executeTime; i++) {
+            success.append(random.nextDouble() < reliability ? '1' : '0');
+        }
         return new CrowdWorker()
-                .cost(csAvg + csSd * Gaussian2Sigma.get(random))
-                .reliability(rpAvg + rpSd * Gaussian2Sigma.get(random))
-                .responseTime((long) (rtLow + rtRange * random.nextDouble()));
+                .cost(cost)
+                .reliability(reliability)
+                .responseTime(responseTime)
+                .success(success.toString());
     }
 }

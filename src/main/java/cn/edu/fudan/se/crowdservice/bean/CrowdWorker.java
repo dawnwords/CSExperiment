@@ -3,6 +3,8 @@ package cn.edu.fudan.se.crowdservice.bean;
 import cn.edu.fudan.se.crowdservice.util.Parser;
 
 import java.lang.reflect.Field;
+import java.util.BitSet;
+import java.util.Map;
 
 /**
  * Created by Dawnwords on 2015/8/19.
@@ -13,8 +15,9 @@ public class CrowdWorker {
     private double reliability;
     private int index;
     private double cost;
+    private String success;
 
-    public static CrowdWorker toBean(String s) {
+    public static CrowdWorker toBean(Map<Integer, String> workerSuccess, String s) {
         CrowdWorker result = new CrowdWorker();
         if (!s.matches("CrowdWorker\\{[^\\}]+\\}")) {
             throw new RuntimeException("Crowd Worker Format error:" + s);
@@ -30,6 +33,7 @@ public class CrowdWorker {
             }
             FieldEnum.valueOf(field[0]).set(result, field[1]);
         }
+        result.success = workerSuccess.get(result.index);
         return result;
     }
 
@@ -75,6 +79,15 @@ public class CrowdWorker {
 
     public CrowdWorker cost(double cost) {
         this.cost = cost;
+        return this;
+    }
+
+    public String success() {
+        return success;
+    }
+
+    public CrowdWorker success(String success) {
+        this.success = success;
         return this;
     }
 

@@ -28,29 +28,29 @@ public class Main {
         resetDB();
         generateWorker();
         Logger.info("Finish Generate Worker: %d time:%.2fs", Parameter.instance().workerSize(), (System.currentTimeMillis() - start) / 1000.0);
-        start = System.currentTimeMillis();
-        for (ExperimentInput input : getExperimentInputs()) {
-            try {
-                new Experiment(input).preform();
-            } catch (Exception e) {
-                Logger.info("Error: %s", e.getMessage());
-            }
-        }
-        Logger.info("==============================================");
-        Logger.info("Finish Planning: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
-        start = System.currentTimeMillis();
-        printResult();
-        Logger.info("Finish Executing: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
+//        start = System.currentTimeMillis();
+//        for (ExperimentInput input : getExperimentInputs()) {
+//            try {
+//                new Experiment(input).preform();
+//            } catch (Exception e) {
+//                Logger.info("Error: %s", e.getMessage());
+//            }
+//        }
+//        Logger.info("==============================================");
+//        Logger.info("Finish Planning: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
+//        start = System.currentTimeMillis();
+//        printResult();
+//        Logger.info("Finish Executing: %.2fs", (System.currentTimeMillis() - start) / 1000.0);
     }
 
     private static void printResult() {
         List<ExpResult> results = new SelectExpResultDAO().getResult();
         Map<String, ArrayList<ExpResult>> table = new HashMap<>();
         for (ExpResult result : results) {
-            ArrayList<ExpResult> er = table.get(result.algoritm());
+            ArrayList<ExpResult> er = table.get(result.algorithm());
             if (er == null) {
                 er = new ArrayList<>();
-                table.put(result.algoritm(), er);
+                table.put(result.algorithm(), er);
             }
             er.add(result.settingId(), result);
         }

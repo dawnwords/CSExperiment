@@ -14,7 +14,7 @@ public class OptimizationResult {
     private double totalReliability;
     private Map<String, WorkerSelectionResult> selectionResult;
 
-    public OptimizationResult build(BufferedReader input) {
+    public OptimizationResult build(Map<Integer, String> workerSuccess, BufferedReader input) {
         try {
             String line = input.readLine();
             if (line == null) {
@@ -53,7 +53,7 @@ public class OptimizationResult {
                     if (line.startsWith("key")) {
                         result.service(line.substring(4, line.length()));
                     } else if (line.startsWith("CrowdWorker")) {
-                        result.addWorker(CrowdWorker.toBean(line));
+                        result.addWorker(CrowdWorker.toBean(workerSuccess, line));
                     } else if (line.startsWith("Total Cost")) {
                         result.executeCost((Double) Parser.toDouble.parse(getValue(line, "Total Cost={double}")));
                     } else if (line.startsWith("Max Response Time")) {

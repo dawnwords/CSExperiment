@@ -1,10 +1,13 @@
 package cn.edu.fudan.se.crowdservice.bean;
 
+import cn.edu.fudan.se.crowdservice.algorithm.Algorithm.AlgorithmFactory;
+
 /**
  * Created by Dawnwords on 2015/8/6.
  */
 public class ExperimentInput {
     private int expId, settingId;
+    private AlgorithmFactory algorithm;
     private int cs1ResultNum, cs2ResultNum, cs3ResultNum;
     private int cs1GroupNum, cs2GroupNum, cs3GroupNum;
     private TimeCost timeCost;
@@ -90,10 +93,21 @@ public class ExperimentInput {
         return this;
     }
 
+    public AlgorithmFactory algorithm() {
+        return algorithm;
+    }
+
+    public ExperimentInput algorithm(AlgorithmFactory algorithm) {
+        this.algorithm = algorithm;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "ExperimentInput{" +
                 "expId=" + expId +
+                ", settingId=" + settingId +
+                ", algorithm=" + algorithm +
                 ", cs1ResultNum=" + cs1ResultNum +
                 ", cs2ResultNum=" + cs2ResultNum +
                 ", cs3ResultNum=" + cs3ResultNum +

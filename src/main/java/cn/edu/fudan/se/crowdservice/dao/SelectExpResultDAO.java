@@ -30,7 +30,7 @@ public class SelectExpResultDAO extends DAO<List<ExpResult>> {
                             .cs2ResultNum(rs.getInt(++i))
                             .cs3ResultNum(rs.getInt(++i))
                             .successRate(rs.getDouble(++i))
-                            .algoritm(rs.getString(++i))
+                            .algorithm(rs.getString(++i))
             );
         }
         return results;

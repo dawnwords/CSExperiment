@@ -4,6 +4,7 @@ import cn.edu.fudan.se.crowdservice.Parameter;
 import cn.edu.fudan.se.crowdservice.bean.*;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,9 +41,11 @@ public class TianHuatAlgorithm implements Algorithm {
             PrintWriter input = new PrintWriter(new OutputStreamWriter(new FileOutputStream(inputPath, false)));
             input.printf("time=%d,cost=%f,numOfGeneration=%d\n", parameter.deadline(), parameter.cost(), ITERATION_NUM);
             input.println("===");
+            Map<Integer, String> workerSuccess = new HashMap<>();
             for (String service : serviceSettings.keySet()) {
                 input.println("key=" + service);
                 for (CrowdWorker worker : serviceSettings.get(service).workerGroup()) {
+                    workerSuccess.put(worker.index(), worker.success());
                     input.println(worker);
                 }
             }
@@ -56,7 +59,7 @@ public class TianHuatAlgorithm implements Algorithm {
             String command = String.format("%s \"%s\" \"%s\"", Parameter.instance().thServicePath(), parameter.bpelPath(), inputPath);
             final Process service = Runtime.getRuntime().exec(command);
             final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputPath, false)));
-            return new OptimizationResult().build(new BufferedReader(new InputStreamReader(new InputStream() {
+            return new OptimizationResult().build(workerSuccess, new BufferedReader(new InputStreamReader(new InputStream() {
                 private InputStream in = service.getInputStream();
 
                 @Override

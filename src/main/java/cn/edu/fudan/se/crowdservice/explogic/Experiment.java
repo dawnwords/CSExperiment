@@ -26,6 +26,7 @@ public class Experiment {
 
     public void preform() {
         for (AlgorithmFactory algorithm : AlgorithmFactory.values()) {
+            input.algorithm(algorithm);
             Random workerGroupRandom = Parameter.instance().workerGroupRandom();
             for (int i = 0; i < Parameter.instance().expTimes(); i++) {
                 CrowdWorkerGroups workerGroups = new GenerateWorkerGroupDAO()
@@ -68,9 +69,9 @@ public class Experiment {
 
                     try {
                         TimeCost totalTimeCost = new TimeCost(input.timeCost());
-                        executeCS("CS1", algorithm, totalTimeCost, cs1GO, cs1WS);
-                        executeCS("CS2", algorithm, totalTimeCost, cs2GO, cs2WS);
-                        executeCS("CS3", algorithm, totalTimeCost, cs3WS);
+                        executeCS("CS1", totalTimeCost, cs1GO, cs1WS);
+                        executeCS("CS2", totalTimeCost, cs2GO, cs2WS);
+                        executeCS("CS3", totalTimeCost, cs3WS);
                     } catch (Exception e) {
                         Logger.info(e.getMessage());
                     }
@@ -79,13 +80,13 @@ public class Experiment {
         }
     }
 
-    private void executeCS(String cs, AlgorithmFactory algorithm, TimeCost totalTimeCost, AlgorithmParameter... parameters) {
+    private void executeCS(String cs, TimeCost totalTimeCost, AlgorithmParameter... parameters) {
         Logger.info("Executing Exp%d-%s", parameters[0].expId(), cs);
         TimeCost planTC;
         AlgorithmParameter workerSelectionPara;
         if (parameters.length == 2) {
             parameters[0].timeCost(totalTimeCost);
-            planTC = algorithm.instance().globalOptimize(parameters[0]);
+            planTC = input.algorithm().instance().globalOptimize(parameters[0]);
             Logger.info("Global Optimize:" + planTC);
             workerSelectionPara = parameters[1];
         } else {
@@ -93,7 +94,7 @@ public class Experiment {
             workerSelectionPara = parameters[0];
         }
         workerSelectionPara.timeCost(planTC);
-        WorkerSelectionResult result = algorithm.instance().workerSelection(workerSelectionPara);
+        WorkerSelectionResult result = input.algorithm().instance().workerSelection(workerSelectionPara);
         Logger.info("Worker Selection:");
         List<ExpStatus> expStatus = new ArrayList<>();
         for (CrowdWorker worker : result.workers()) {
@@ -101,8 +102,7 @@ public class Experiment {
             expStatus.add(new ExpStatus()
                     .expid(input.expId())
                     .workerid(worker.index())
-                    .cs(cs)
-                    .algorithm(algorithm.name()));
+                    .cs(cs));
         }
         TimeCost realTC = result.executeTimeCost();
 
